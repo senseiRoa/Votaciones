@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demokratianweb.Data.Infraestructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using static Demokratianweb.Data.Enums.HelpConstantes;
 
 namespace Demokratianweb.Data.Entities
 {
-    public class RondaVotacionEntity
+    public class RondaVotacionEntity: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

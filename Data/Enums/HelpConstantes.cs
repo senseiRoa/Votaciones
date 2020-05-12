@@ -21,6 +21,11 @@ namespace Demokratianweb.Data.Enums
             Abierta,
             Anulada,
 
+        } public enum EstadoRegistro
+        {
+            Inactivo,
+            Activo,
+
         }
     }
 }

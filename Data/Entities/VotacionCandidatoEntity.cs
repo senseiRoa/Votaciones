@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demokratianweb.Data.Infraestructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Demokratianweb.Data.Entities
 {
-    public class VotacionCandidatoEntity
+    public class VotacionCandidatoEntity: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -19,7 +20,7 @@ namespace Demokratianweb.Data.Entities
 
         [ForeignKey("Candidato")]
         public Guid IdCandidato { get; set; }
-        public virtual CandidatoEntity Votante { get; set; }
+        public virtual CandidatoEntity Candidato { get; set; }
     }
    
 }

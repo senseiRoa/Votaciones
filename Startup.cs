@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Demokratianweb.Data.Infraestructure;
+using Demokratianweb.Service;
 
 namespace Demokratianweb
 {
@@ -31,6 +33,20 @@ namespace Demokratianweb
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            // repository
+            services.AddScoped<CandidatoRepository>();
+            services.AddScoped<ControlVotoVotanteRepository>();
+            services.AddScoped<RondaCandidatoRepository>();
+            services.AddScoped<RondaVotacionRepository>();
+            services.AddScoped<VotacionCandidatoRepository>();
+            services.AddScoped<VotacionRepository>();
+            services.AddScoped<VotacionVotanteRepository>();
+            services.AddScoped<VotanteRepository>();
+            services.AddScoped<VotoRondaRepository>();
+            // service
+            services.AddScoped<RondaVotacionService>();
+            services.AddScoped<VotacionService>();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

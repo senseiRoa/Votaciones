@@ -1,0 +1,23 @@
+<p-toast></p-toast>
+<div class="container" *ngIf="votacion">
+  <h1 id="tableLabel">Ronda: {{ronda.descripcion}}</h1>
+  link localhost:44396/voto/{{id}} <br>
+  <a class="nav-link text-dark" [routerLink]="['/voto',id]">votar</a>
+
+  <hr>
+  <p-tabView>
+    <p-tabPanel header="Resultados">
+      <div class="ui-g">
+        aqui van las graficas que estoy habilitando
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Candidatos">
+      <div class="ui-g">
+        <ul>
+          <li *ngFor="let item of candidatos">{{item.votacionCandidato.candidato.nombre}} </li>
+        </ul>
+      </div>
+    </p-tabPanel>
+
+  </p-tabView>
+</div>

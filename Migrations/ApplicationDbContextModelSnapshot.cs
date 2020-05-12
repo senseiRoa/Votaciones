@@ -31,8 +31,20 @@ namespace Demokratianweb.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("text");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -47,11 +59,23 @@ namespace Demokratianweb.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("IdRondaVotacion")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdVotacionVotante")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -70,11 +94,23 @@ namespace Demokratianweb.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("IdRondaVotacion")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdVotacionCandidato")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -99,8 +135,20 @@ namespace Demokratianweb.Migrations
                     b.Property<int>("Estado")
                         .HasColumnType("integer");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("IdVotacion")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -117,6 +165,9 @@ namespace Demokratianweb.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("IdCandidato")
                         .HasColumnType("uuid");
 
@@ -125,6 +176,15 @@ namespace Demokratianweb.Migrations
 
                     b.Property<Guid?>("VotanteId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -149,8 +209,20 @@ namespace Demokratianweb.Migrations
                     b.Property<int>("Estado")
                         .HasColumnType("integer");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("fechaFinal")
                         .HasColumnType("timestamp without time zone");
@@ -171,11 +243,23 @@ namespace Demokratianweb.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("IdVotacion")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdVotante")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -197,6 +281,9 @@ namespace Demokratianweb.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("text");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("text");
 
@@ -205,6 +292,15 @@ namespace Demokratianweb.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -219,8 +315,20 @@ namespace Demokratianweb.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<int>("EstadoRegistro")
+                        .HasColumnType("integer");
+
                     b.Property<string>("_hash")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("fechaEdicion")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("fechaEliminacion")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("idRondaCandidato")
                         .HasColumnType("uuid");

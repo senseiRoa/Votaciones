@@ -1,1 +1,15 @@
-<p>votar works!</p>
+<h3 class="first">Seleccione una opción</h3>
+<div class="ui-g" style="width:250px;margin-bottom:10px">
+  <div class="ui-g-12">
+    <p-radioButton name="group1" value="null" label="Voto en Blanco" [(ngModel)]="seleccion"></p-radioButton>
+  </div>
+
+  <div class="ui-g-12" *ngFor="let item of candidatos">
+    <p-radioButton name="group1" value="{{item.id}}" label="{{item.votacionCandidato.candidato.nombre}} "
+      [(ngModel)]="seleccion"></p-radioButton>
+  </div>
+
+  <div class="ui-dialog-buttonpane ui-helper-clearfix">
+    <button type="button" pButton icon="pi pi-check" (click)="save()" label="Votar"></button>
+  </div>
+</div>

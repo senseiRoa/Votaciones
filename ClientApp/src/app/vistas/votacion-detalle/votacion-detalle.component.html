@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+<div class="container" *ngIf="votacion">
+  <h1 id="tableLabel">Votacion: {{votacion.nombre}}</h1>
+  <p>{{votacion.descripcion}}</p>
+  <p>Fecha inicial:{{votacion.fechaInicial | date:'medium'}}</p>
+  <p>Fecha final:{{votacion.fechaFinal | date:'medium'}}</p>
+
+
+  <hr>
+
+  <p-tabView>
+    <p-tabPanel header="Rondas">
+      <div class="ui-g">
+
+        <div class="ui-g-12">
+          <div style="text-align:right">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Ronda"></button>
+          </div>
+        </div>
+
+
+
+        <p-table [value]="rondas">
+          <ng-template pTemplate="caption">
+            Rondas
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Descripción</th>
+              <th>-</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-ronda>
+            <tr>
+              <td>{{ ronda.descripcion}}</td>
+              <td>
+                <button type="button" pButton icon="pi pi-search" [routerLink]='["/ronda",ronda.id]'></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Candidatos">
+      <div class="ui-g">
+        <ul >
+          <li *ngFor="let item of candidatos">{{item.candidato.nombre}} </li>
+        </ul>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Votantes">
+      <div class="ui-g">
+        <ul>
+          <li *ngFor="let item of votantes">{{item.votante.nombre}} - {{item.votante.correo}}</li>
+        </ul>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+
+
+
+<p-dialog header="Nueva Ronda" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade"
+  [modal]="true" [style]="{width: '600px'}">
+  <div class="ui-g ui-fluid" *ngIf="rondaEntity">
+    <div class="ui-g-12">
+
+
+      <div class="ui-g-6">
+        <label for="year">Descripción</label><br>
+        <input pInputText id="year" [(ngModel)]="rondaEntity.rondavotacion.descripcion" />
+      </div>
+
+      <div class="ui-g-6">
+        <label>Candidatos</label><br>
+        <p-multiSelect [options]="candidatosModal" [(ngModel)]="rondaEntity.candidatos" defaultLabel="Seleccione una opcion">
+        </p-multiSelect>
+      </div>
+    </div>
+
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Crear"></button>
+    </div>
+  </p-footer>
+</p-dialog>

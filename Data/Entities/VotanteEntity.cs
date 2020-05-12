@@ -1,4 +1,5 @@
-﻿using Demokratianweb.Models;
+﻿using Demokratianweb.Data.Infraestructure;
+using Demokratianweb.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Demokratianweb.Data.Entities
 {
-    public class VotanteEntity
+    public class VotanteEntity: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

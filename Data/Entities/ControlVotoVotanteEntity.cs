@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demokratianweb.Data.Infraestructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Demokratianweb.Data.Entities
 {
-    public class ControlVotoVotanteEntity
+    public class ControlVotoVotanteEntity: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
