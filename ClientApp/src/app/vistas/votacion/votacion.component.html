@@ -6,7 +6,7 @@
 
   <div class="container">
     <div style="text-align:right">
-      <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Convocatoria"></button>
+      <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Votación"></button>
     </div>
   </div>
   <p-table [value]="votaciones">
@@ -72,12 +72,12 @@
 
       <div class="ui-g-6">
         <label>Votantes</label><br>
-        <p-multiSelect [options]="votantes" [(ngModel)]="entity.votantes" defaultLabel="Seleccione una opcion"></p-multiSelect>
+        <p-multiSelect [options]="votantes" [(ngModel)]="entity.votantes" defaultLabel="Seleccione una opción" appendTo="body"></p-multiSelect>
 
       </div>
       <div class="ui-g-6">
         <label>Candidatos</label><br>
-        <p-multiSelect [options]="candidatos" [(ngModel)]="entity.candidatos" defaultLabel="Seleccione una opcion"></p-multiSelect>
+        <p-multiSelect [options]="candidatos" [(ngModel)]="entity.candidatos" defaultLabel="Seleccione una opción" appendTo="body"></p-multiSelect>
       </div>
 
     </div>
