@@ -108,6 +108,23 @@ namespace Demokratianweb.Controllers
 
         }
 
+        [HttpGet]
+        [Route("{id}/resultados")]
+        public ActionResult GetResultado(Guid id)
+        {
+            try
+            {
+                var resultados = this._rondaVotacionService.Result(id);
+                return Ok(new { status = true, message = resultados });
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { status = true, message = ex.Message });
+            }
+
+        }
+
         [HttpPost]
         public ActionResult Post(RondaVotacionWrapper entity)
         {
@@ -139,7 +156,7 @@ namespace Demokratianweb.Controllers
             try
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var rta = this._rondaVotacionService.AddVoto(entity,Guid.Parse(userId));
+                var rta = this._rondaVotacionService.AddVoto(entity, Guid.Parse(userId));
                 if (rta)
                 {
                     return Ok(new { status = true, message = rta });

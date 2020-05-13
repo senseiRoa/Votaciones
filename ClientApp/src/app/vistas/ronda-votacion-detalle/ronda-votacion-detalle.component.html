@@ -8,7 +8,19 @@
   <p-tabView>
     <p-tabPanel header="Resultados">
       <div class="ui-g">
-        aqui van las graficas que estoy habilitando
+
+        <div class="ui-g-12">
+          <button type="button" pButton icon="pi pi-refresh" (click)="cargarResultados()" label="Actualizar resultados"
+            style="float: right;"></button>
+        </div>
+
+        <div class="ui-g-12">
+          <p-chart type="horizontalBar" [data]="data2"></p-chart>
+        </div>
+        <div class="ui-g-12">
+          <p-chart type="pie" [data]="data"></p-chart>
+        </div>
+
       </div>
     </p-tabPanel>
     <p-tabPanel header="Candidatos">

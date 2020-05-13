@@ -28,7 +28,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import {ButtonModule} from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { StepsModule } from 'primeng/steps';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -37,12 +37,12 @@ import { CaptchaModule } from 'primeng/captcha';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
-import {TableModule} from 'primeng/table';
-import {CalendarModule} from 'primeng/calendar';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {TabViewModule} from 'primeng/tabview';
-import {RadioButtonModule} from 'primeng/radiobutton';
-
+import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TabViewModule } from 'primeng/tabview';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -97,7 +97,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
     CalendarModule,
     MultiSelectModule,
     TabViewModule,
-    RadioButtonModule
+    RadioButtonModule,
+    ChartModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 export class RondaVotacionService extends GenericService {
 
 
+
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http);
     this.apiURL = baseUrl + 'rondavotacion';
@@ -22,6 +23,11 @@ export class RondaVotacionService extends GenericService {
   public getAllCandidatosByRondaId(id: any): Observable<any> {
     return this.httpClient.get(this.apiURL + '/' + id + '/candidatos');
   }
+
+  public getResultados(id: any): Observable<any> {
+    return this.httpClient.get(this.apiURL + '/' + id + '/resultados');
+  }
+
 
 
   public async createVotoAsync(entity: any): Promise<any> {

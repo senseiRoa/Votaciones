@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -93,7 +94,7 @@ namespace Demokratianweb.Service
 
         }
 
-        internal Boolean AddVoto(VotoWrapper entity, Guid userId)
+        public Boolean AddVoto(VotoWrapper entity, Guid userId)
         {
             var registro = false;
             try
@@ -117,7 +118,9 @@ namespace Demokratianweb.Service
 
 
                             var continuar =
-                            this._applicationDBContext.Set<ControlVotoVotanteEntity>().Where(i => i.IdRondaVotacion.Equals(entity.RondaId) && i.IdVotacionVotante.Equals(votante.Id)).Count();
+                            this._applicationDBContext.Set<ControlVotoVotanteEntity>()
+                            .Where(i => i.IdRondaVotacion.Equals(entity.RondaId) && i.IdVotacionVotante.Equals(votante.Id))
+                            .Count();
 
                             if (continuar == 0)
                             {
@@ -137,7 +140,7 @@ namespace Demokratianweb.Service
                                 {
                                     Id = Guid.NewGuid(),
                                     IdRondaVotacion = entity.RondaId,
-                                    IdVotacionVotante = userId,
+                                    IdVotacionVotante = votante.Id,
 
                                     ///////////////////////////////////////
                                     EstadoRegistro = Data.Enums.HelpConstantes.EstadoRegistro.Activo,
@@ -170,7 +173,7 @@ namespace Demokratianweb.Service
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        throw new Exception("hubo un error guardando el registro=>" + ex.Message);
+                        throw new Exception(ex.Message);
                     }
                 }
 
@@ -182,5 +185,54 @@ namespace Demokratianweb.Service
             }
             return registro;
         }
+
+
+        public ResultadoRonda Result(Guid rondaId)
+        {
+            ResultadoRonda resultado = new ResultadoRonda();
+            try
+            {
+                var candidatosRonda = (from c in this._applicationDBContext.Set<RondaCandidatoEntity>()
+                                       where c.IdRondaVotacion.Equals(rondaId)
+                                       select new { id = c.Id, candidato = c.VotacionCandidato.Candidato.Nombre }
+                                       )
+                                       .Distinct()                                       
+                                       .ToList();
+                candidatosRonda.Add(new { id = Guid.Empty, candidato = "Voto en Blanco" });
+                var votos = (from vr in this._applicationDBContext.Set<VotoRondaEntity>()
+                             where vr.IdRondaVotacion.Equals(rondaId)
+                             select new { idCandidato = vr.idRondaCandidato }
+                            ).ToList();
+
+
+                int total = 0;
+                foreach (var item in candidatosRonda)
+                {
+                    if (item.id.Equals(Guid.Empty))
+                    {
+                        total = votos.Where(i => i.idCandidato == null).Count();
+                    }
+                    else
+                    {
+                        total = votos.Where(i => i.idCandidato.Equals(item.id)).Count();
+                    }
+
+                    resultado.Candidatos.Add(item.candidato);
+                    resultado.Votos.Add(total);
+
+
+                }
+                resultado.TotalVotos = resultado.Votos.Sum();
+
+                return resultado;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }
