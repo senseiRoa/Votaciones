@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '8088:80'
+      - '8084:80'
     volumes:      
       - uploadVolume:/var/Uploads
 volumes:
