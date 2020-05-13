@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Demokratianweb.Data.Infraestructure;
 using Demokratianweb.Service;
+using System;
 
 namespace Demokratianweb
 {
@@ -30,9 +31,10 @@ namespace Demokratianweb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var cs = Configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine("mi cadena de conexion es :"+cs);
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(cs));
 
             // repository
             services.AddScoped<CandidatoRepository>();
@@ -85,7 +87,7 @@ namespace Demokratianweb
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+               // app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

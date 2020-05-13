@@ -1,0 +1,18 @@
+
+version: '3.5'
+
+services:
+
+  demokratianweb-prod:
+    container_name: demokratian-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8088:80'
+    volumes:      
+      - uploadVolume:/var/Uploads
+volumes:
+  uploadVolume: {}
+
+#docker-compose -f docker-compose.yml up --build -d

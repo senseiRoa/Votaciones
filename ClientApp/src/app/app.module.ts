@@ -18,7 +18,6 @@ import { NgbModule, NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng
 import { VotacionComponent } from './vistas/votacion/votacion.component';
 
 import { CandidatoComponent } from './vistas/candidato/candidato.component';
-import { VotanteComponent } from './vistas/votante/votante.component';
 import { ResultadosComponent } from './vistas/resultados/resultados.component';
 import { VotarComponent } from './vistas/votar/votar.component';
 
@@ -52,7 +51,6 @@ import { ChartModule } from 'primeng/chart';
     FetchDataComponent,
     VotacionComponent,
     CandidatoComponent,
-    VotanteComponent,
     ResultadosComponent,
     VotarComponent,
     VotacionDetalleComponent,

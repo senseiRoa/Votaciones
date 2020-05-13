@@ -1,0 +1,7 @@
+psql -h 192.168.209.40 -p 80 -U rootR corte_votos_db < "Z:\Proyectos\corteSuprema\votaciones\Demokratianweb\documentacion\00 schema inicial.sql"
+
+root308/*
+
+
+
+psql -h 192.168.209.40 -p 80 -U rootR corte_votos_db < "Z:\Proyectos\corteSuprema\votaciones\Demokratianweb\documentacion\01 add candidatos.sql"
