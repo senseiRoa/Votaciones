@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="container" *ngIf="votacion">
+<div class="container" *ngIf="ronda">
   <h1 id="tableLabel">Ronda: {{ronda.descripcion}}</h1>
   link localhost:44396/voto/{{id}} <br>
   <a class="nav-link text-dark" [routerLink]="['/voto',id]">votar</a>

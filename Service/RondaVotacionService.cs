@@ -109,7 +109,7 @@ namespace Demokratianweb.Service
 
                         var votante = (from x in this._applicationDBContext.Set<VotanteEntity>()
                                        join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante
-                                       where vv.IdVotacion.Equals(rondaVotacion.IdVotacion) && x.UserId.Equals(userId)
+                                       where vv.IdVotacion.Equals(rondaVotacion.IdVotacion) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
                                        select vv
                                      ).FirstOrDefault();
                         if (votante != null)

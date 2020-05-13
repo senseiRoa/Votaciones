@@ -133,6 +133,7 @@ namespace Demokratianweb.Controllers
 
 
         [HttpPost]
+        [Route("voto")]
         public ActionResult PostVoto(VotoWrapper entity)
         {
             try

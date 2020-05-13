@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RondaVotacionService } from 'src/app/servicios/ronda-votacion.service';
 import { MessageService } from 'primeng/api';
+import { VotoWrapperModel } from 'src/app/model/VotoWrapperModel';
 
 @Component({
   selector: 'app-votar',
@@ -22,21 +23,30 @@ export class VotarComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.cargarDatos();
     this.id = this.rutaActiva.snapshot.params.id;
+    await this.cargarDatos();
   }
   async cargarDatos() {
 
     this.rondaVotacionService.getAllCandidatosByRondaId(this.id).subscribe(response => {
       if (response.status === true) {
         this.candidatos = response.message;
-
       }
     });
   }
 
   async save() {
     try {
+      if (this.seleccion) {
+
+
+        const voto = {} as VotoWrapperModel;
+        voto.CandidatoId = this.seleccion === 'null' ? null : this.seleccion;
+        voto.rondaId = this.id;
+        const rta = await this.rondaVotacionService.createVotoAsync(voto);
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar una opción' });
+      }
 
     } catch (error) {
       console.log(error);
