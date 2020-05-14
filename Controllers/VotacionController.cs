@@ -46,7 +46,8 @@ namespace Demokratianweb.Controllers
         {
             try
             {
-                var entityList = this._votacionRepository.GetAll();
+                var entityList = this._votacionRepository.GetAll()
+                    .OrderByDescending(i=>i.fechaCreacion);
                 return Ok(new { status = true, message = entityList });
             }
             catch (Exception ex)

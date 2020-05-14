@@ -13,13 +13,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Demokratianweb.Controllers
 {
-// roa    [Authorize]
+    // [Authorize(Roles = "Admin,Moderador")]
     [ApiController]
     [Route("[controller]")]
     public class CandidatoController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-       
+
 
         private readonly CandidatoRepository _entityRepository;
 
@@ -27,13 +27,13 @@ namespace Demokratianweb.Controllers
 
         public CandidatoController(ILogger<CandidatoController> logger, UserManager<ApplicationUser> userManager,
             CandidatoRepository entityRepository
-            
+
             )
         {
             _logger = logger;
             _userManager = userManager;
             _entityRepository = entityRepository;
-            
+
         }
 
 
@@ -42,7 +42,8 @@ namespace Demokratianweb.Controllers
         {
             try
             {
-                var entityList = this._entityRepository.GetAll();
+                var entityList = this._entityRepository.GetAll()
+                    .OrderBy(i => i.Nombre);
                 return Ok(new { status = true, message = entityList });
             }
             catch (Exception ex)
@@ -68,9 +69,9 @@ namespace Demokratianweb.Controllers
                 return BadRequest(new { status = true, message = ex.Message });
             }
 
-        } 
-       
-       
+        }
+
+
 
         [HttpPost]
         public ActionResult Post(CandidatoEntity entity)

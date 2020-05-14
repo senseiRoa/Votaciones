@@ -16,6 +16,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Demokratianweb.Data.Infraestructure;
 using Demokratianweb.Service;
 using System;
+using IdentityServer4.Services;
 
 namespace Demokratianweb
 {
@@ -32,7 +33,7 @@ namespace Demokratianweb
         public void ConfigureServices(IServiceCollection services)
         {
             var cs = Configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine("mi cadena de conexion es :"+cs);
+            Console.WriteLine("mi cadena de conexion es :" + cs);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(cs));
 
@@ -51,6 +52,7 @@ namespace Demokratianweb
             services.AddScoped<VotacionService>();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -59,6 +61,8 @@ namespace Demokratianweb
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
+
+            //services.AddTransient<IProfileService, ProfileService>();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
 
@@ -87,7 +91,7 @@ namespace Demokratianweb
             }
             else
             {
-               // app.UseExceptionHandler("/Error");
+                // app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

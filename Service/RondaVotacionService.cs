@@ -84,6 +84,7 @@ namespace Demokratianweb.Service
 
             var result = (from c in this._applicationDBContext.Set<RondaCandidatoEntity>()
                           where c.IdRondaVotacion.Equals(rondaId)
+                          orderby c.VotacionCandidato.Candidato.Nombre
                           select c
                         )
                         .Include(i => i.VotacionCandidato)
@@ -161,7 +162,7 @@ namespace Demokratianweb.Service
                             }
                             else
                             {
-                                throw new Exception("Ya voto");
+                                throw new Exception("Usted Ya completó su voto");
                             }
                         }
                         else

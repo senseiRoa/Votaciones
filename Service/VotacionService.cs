@@ -95,6 +95,7 @@ namespace Demokratianweb.Service
 
             var result = (from c in this._applicationDBContext.Set<VotacionCandidatoEntity>()
                           where c.IdVotacion.Equals(votacionId)
+                          orderby c.Candidato.Nombre
                           select c
                         ).Include(i => i.Candidato)
                         .ToList();
@@ -108,6 +109,7 @@ namespace Demokratianweb.Service
 
             var result = (from v in this._applicationDBContext.Set<VotacionVotanteEntity>()
                           where v.IdVotacion.Equals(votacionId)
+                          orderby v.Votante.Nombre
                           select v
                         ).Include(i => i.Votante)
                         .ToList();

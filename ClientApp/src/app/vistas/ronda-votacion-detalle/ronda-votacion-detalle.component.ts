@@ -1,6 +1,6 @@
 import { MessageService } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RondaVotacionService } from 'src/app/servicios/ronda-votacion.service';
 import { ResponseApi } from 'src/app/model/response';
 import { RondaVotacionModel } from 'src/app/model/RondaVotacionModel';
@@ -21,7 +21,8 @@ export class RondaVotacionDetalleComponent implements OnInit {
 
   constructor(private rutaActiva: ActivatedRoute,
     private rondaVotacionService: RondaVotacionService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) {
 
 
@@ -139,5 +140,23 @@ export class RondaVotacionDetalleComponent implements OnInit {
     return chartColors;
   }
 
+  copyMessage() {
+    console.log(this.router);
+    const val = this.getUrl();
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+  }
+  getUrl(): string {
+    return `${document.location.origin}/voto/${this.id}`;
+  }
 }
 
