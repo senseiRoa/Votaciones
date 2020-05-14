@@ -131,7 +131,7 @@ namespace Demokratianweb.Controllers
         {
             try
             {
-                this._logger.LogInformation("se va a registrar una ronda", JsonConvert.SerializeObject(entity));
+                this._logger.LogInformation("se va a registrar una ronda " + JsonConvert.SerializeObject(entity));
                 var rta = this._rondaVotacionService.AddRondaVotacion(entity);
 
                 if (rta)
@@ -145,7 +145,7 @@ namespace Demokratianweb.Controllers
             }
             catch (Exception ex)
             {
-                this._logger.LogError("Error registrando una ronda->", ex.Message);
+                this._logger.LogError("Error registrando una ronda->" + ex.Message);
                 return BadRequest(new { status = true, message = ex.Message });
             }
 
@@ -158,7 +158,7 @@ namespace Demokratianweb.Controllers
         {
             try
             {
-                this._logger.LogInformation("se va a registrar un voto",JsonConvert.SerializeObject(entity));
+                this._logger.LogInformation("se va a registrar un voto " + JsonConvert.SerializeObject(entity));
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var rta = this._rondaVotacionService.AddVoto(entity, Guid.Parse(userId));
                 if (rta)
@@ -172,7 +172,7 @@ namespace Demokratianweb.Controllers
             }
             catch (Exception ex)
             {
-                this._logger.LogError("Error registrando un voto->", ex.Message);
+                this._logger.LogError("Error registrando un voto-> " + ex.Message);
                 return BadRequest(new { status = true, message = ex.Message });
             }
 

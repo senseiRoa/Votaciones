@@ -4,18 +4,18 @@
 
   <p-panel header="Candidatos" *ngIf="candidatos">
     <div class="ui-g">
-      <div class="ui-g" style="width:250px;margin-bottom:10px">
-        <div class="ui-g-12">
-          <p-radioButton name="group1" value="null" label="Voto en Blanco" [(ngModel)]="seleccion"></p-radioButton>
-        </div>
-
-        <div class="ui-g-12" *ngFor="let item of candidatos">
-          <p-radioButton name="group1" value="{{item.id}}" label="{{item.votacionCandidato.candidato.nombre}} "
-            [(ngModel)]="seleccion"></p-radioButton>
-        </div>
 
 
+
+      <div class="ui-g-12" *ngFor="let item of candidatos">
+        <p-radioButton name="group1" value="{{item.id}}" label="{{item.votacionCandidato.candidato.nombre}} "
+          [(ngModel)]="seleccion"></p-radioButton>
       </div>
+      <hr>
+      <div class="ui-g-12">
+        <p-radioButton name="group1" value="null" label="Voto en Blanco" [(ngModel)]="seleccion"></p-radioButton>
+      </div>
+
       <div class="ui-g-12">
         <button type="button" pButton icon="pi pi-check" (click)="save()" label="Votar"
           [disabled]="!seleccion || ocupado===true" style="float: right;"></button>
