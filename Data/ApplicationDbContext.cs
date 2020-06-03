@@ -29,6 +29,7 @@ namespace Demokratianweb.Data
             modelBuilder.HasPostgresExtension("uuid-ossp");
             new CandidatoMap(modelBuilder.Entity<CandidatoEntity>());
             new ControlVotoVotanteMap(modelBuilder.Entity<ControlVotoVotanteEntity>());
+            new RondaVotanteMap(modelBuilder.Entity<RondaVotanteEntity>());
             new RondaCandidatoMap(modelBuilder.Entity<RondaCandidatoEntity>());
             new RondaVotacionMap(modelBuilder.Entity<RondaVotacionEntity>());
             new VotacionCandidatoMap(modelBuilder.Entity<VotacionCandidatoEntity>());

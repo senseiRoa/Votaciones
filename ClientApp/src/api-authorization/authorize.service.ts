@@ -49,10 +49,12 @@ export class AuthorizeService {
   }
 
   public getUser(): Observable<IUser | null> {
-    return concat(
+    const val = concat(
       this.userSubject.pipe(take(1), filter(u => !!u)),
       this.getUserFromStorage().pipe(filter(u => !!u), tap(u => this.userSubject.next(u))),
       this.userSubject.asObservable());
+    debugger;
+    return val;
   }
 
   public getAccessToken(): Observable<string> {

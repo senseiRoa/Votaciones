@@ -33,10 +33,10 @@ namespace Demokratianweb.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<WeatherForecast>> Get()
+        public async Task<IEnumerable<string>> Get()
         {
             // var info = User.Identity.Name;
-           // var roles = User.Claims.Where(i => i.Type == ClaimTypes.Role).ToList();
+            // var roles = User.Claims.Where(i => i.Type == ClaimTypes.Role).ToList();
             //var x = _userManager.GetUserId(User);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userId2 = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,12 +44,7 @@ namespace Demokratianweb.Controllers
 
 
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
+            return Enumerable.Range(1, 5).Select(index => rng.Next(-20, 55).ToString())
             .ToArray();
         }
     }

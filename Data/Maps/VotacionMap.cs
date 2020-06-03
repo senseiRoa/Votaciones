@@ -75,7 +75,21 @@ namespace Demokratianweb.Data.Maps
 
     }
 
-     public class VotacionCandidatoMap
+    public class RondaVotanteMap
+    {
+        public RondaVotanteMap(EntityTypeBuilder<RondaVotanteEntity> entityTypeBuilder)
+        {
+
+            entityTypeBuilder.HasKey(x => x.Id);
+            entityTypeBuilder.ToTable("ronda_votante");
+            entityTypeBuilder.Property(x => x.Id).HasColumnName("id")
+            .HasDefaultValueSql("uuid_generate_v4()");
+
+        }
+
+    }
+
+    public class VotacionCandidatoMap
     {
         public VotacionCandidatoMap(EntityTypeBuilder<VotacionCandidatoEntity> entityTypeBuilder)
         {

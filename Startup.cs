@@ -17,6 +17,7 @@ using Demokratianweb.Data.Infraestructure;
 using Demokratianweb.Service;
 using System;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Demokratianweb
 {
@@ -33,7 +34,7 @@ namespace Demokratianweb
         public void ConfigureServices(IServiceCollection services)
         {
             var cs = Configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine("mi cadena de conexion es :" + cs);
+            //todo: 308 ->Console.WriteLine("mi cadena de conexion es :" + cs);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(cs));
 
@@ -53,21 +54,29 @@ namespace Demokratianweb
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                    .AddUserStore<UserStore>();
+                    //.AddUserManager<UserManager>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(opt =>
+                {
+                foreach (var c in opt.Clients)
+                    c.AccessTokenLifetime = 120;
+            }
+                );
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
 
-            //services.AddTransient<IProfileService, ProfileService>();
+          //  services.AddTransient<IProfileService, ProfileService>();
             services.AddRazorPages();
-            // In production, the Angular files will be served from this directory
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             IHostingEnvironment env = serviceProvider.GetService<IHostingEnvironment>();
+            // In production, the Angular files will be served from this directory
             if (env.IsProduction())
             {
 

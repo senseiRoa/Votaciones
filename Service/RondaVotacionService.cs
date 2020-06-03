@@ -50,9 +50,25 @@ namespace Demokratianweb.Service
 
                                           }
                                      ).ToList();
+                        var votantes = (from vv in entity.Votantes
+                                        select new RondaVotanteEntity
+                                        {
+                                            Id = Guid.NewGuid(),
+                                            IdRondaVotacion = entity.Rondavotacion.Id,
+                                            IdVotacionVotante = Guid.Parse(vv),
+                                            ///////////////////////////////////////
+                                            EstadoRegistro = Data.Enums.HelpConstantes.EstadoRegistro.Activo,
+                                            fechaCreacion = DateTime.Now,
+                                            fechaEdicion = DateTime.Now,
+
+
+                                        }
+                                     ).ToList();
+
 
                         this._applicationDBContext.Add(entity.Rondavotacion);
                         this._applicationDBContext.AddRange(candidatos);
+                        this._applicationDBContext.AddRange(votantes);
 
 
                         this._applicationDBContext.SaveChanges();
@@ -95,6 +111,48 @@ namespace Demokratianweb.Service
 
         }
 
+        public List<RondaVotanteEntity> GetAllVotantesByRondaId(Guid rondaId)
+        {
+
+
+            var result = (from rv in this._applicationDBContext.Set<RondaVotanteEntity>()
+                          join v in this._applicationDBContext.Set<VotacionVotanteEntity>()
+                          on rv.IdVotacionVotante equals v.Id
+                          where rv.IdRondaVotacion.Equals(rondaId)
+                          orderby v.Votante.Nombre
+                          select rv
+                        )
+                        .Include(i => i.VotacionVotante)
+                        .Include(i => i.VotacionVotante.Votante)
+                        .ToList();
+
+            return result;
+
+        }
+
+        public List<RondaVotanteEntity> GetAllmissingVotersByRondaId(Guid rondaId)
+        {
+            //https://stackoverflow.com/questions/16166151/join-subquery-result-in-linq
+            //https://stackoverflow.com/questions/33961414/left-join-on-two-lists-and-maintain-one-property-from-the-right-with-linq
+
+            var result = (from rv in this._applicationDBContext.Set<RondaVotanteEntity>()
+                          join v in this._applicationDBContext.Set<ControlVotoVotanteEntity>()
+                          on rv.IdVotacionVotante equals v.IdVotacionVotante
+
+                          into joinedList
+                          from sub in joinedList.DefaultIfEmpty()
+                          where rv.IdRondaVotacion.Equals(rondaId)
+                          orderby rv.VotacionVotante.Votante.Nombre
+                          select rv
+                        )
+                        .Include(i => i.VotacionVotante)
+                        .Include(i => i.VotacionVotante.Votante)
+                        .ToList();
+
+            return result;
+
+        }
+
         public Boolean AddVoto(VotoWrapper entity, Guid userId)
         {
             var registro = false;
@@ -111,6 +169,7 @@ namespace Demokratianweb.Service
 
                         var votante = (from x in this._applicationDBContext.Set<VotanteEntity>()
                                        join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante
+                                       join rv in this._applicationDBContext.Set<RondaVotanteEntity>() on vv.Id equals rv.IdVotacionVotante
                                        where vv.IdVotacion.Equals(rondaVotacion.IdVotacion) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
                                        select vv
                                      ).FirstOrDefault();
@@ -197,7 +256,7 @@ namespace Demokratianweb.Service
                                        where c.IdRondaVotacion.Equals(rondaId)
                                        select new { id = c.Id, candidato = c.VotacionCandidato.Candidato.Nombre }
                                        )
-                                       .Distinct()                                       
+                                       .Distinct()
                                        .ToList();
                 candidatosRonda.Add(new { id = Guid.Empty, candidato = "Voto en Blanco" });
                 var votos = (from vr in this._applicationDBContext.Set<VotoRondaEntity>()

@@ -110,6 +110,41 @@ namespace Demokratianweb.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/votantes")]
+        public ActionResult GetVotantes(Guid id)
+        {
+            try
+            {
+                var entity = this._rondaVotacionService.GetAllVotantesByRondaId(id);
+                return Ok(new { status = true, message = entity });
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { status = true, message = ex.Message });
+            }
+
+        }
+
+        [HttpGet]
+        [Route("{id}/votantespendientes")]
+        public ActionResult GetVotantesPendientes(Guid id)
+        {
+            try
+            {
+                var entity = this._rondaVotacionService.GetAllmissingVotersByRondaId(id);
+                return Ok(new { status = true, message = entity });
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { status = true, message = ex.Message });
+            }
+
+        }
+
+
+        [HttpGet]
         [Route("{id}/resultados")]
         public ActionResult GetResultado(Guid id)
         {

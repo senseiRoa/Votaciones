@@ -10,5 +10,6 @@ namespace Demokratianweb.Models
     {
         public RondaVotacionEntity Rondavotacion { get; set; }
         public List<string> Candidatos { get; set; }
+        public List<string> Votantes { get; set; }
     }
 }

@@ -8,21 +8,17 @@ using System.Threading.Tasks;
 
 namespace Demokratianweb.Data.Entities
 {
-    public class VotoRondaEntity: BaseEntity
+    public class RondaVotanteEntity: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
-        public string _hash { get; set; }
 
         [ForeignKey("RondaVotacion")]
         public Guid IdRondaVotacion { get; set; }
         public virtual RondaVotacionEntity RondaVotacion { get; set; }
 
-        [ForeignKey("RondaCandidato")]
-        public Guid? idRondaCandidato { get; set; }
-        public virtual RondaCandidatoEntity RondaCandidato { get; set; }
-
-
+        [ForeignKey("VotacionVotante")]
+        public Guid IdVotacionVotante { get; set; }
+        public virtual VotacionVotanteEntity VotacionVotante { get; set; }
     }
-    
 }
