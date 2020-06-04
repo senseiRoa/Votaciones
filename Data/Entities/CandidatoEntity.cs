@@ -14,7 +14,7 @@ namespace Demokratianweb.Data.Entities
         public Guid Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        // public string urlImage { get; set; }
+        public string urlImage { get; set; }
     }
     
 }

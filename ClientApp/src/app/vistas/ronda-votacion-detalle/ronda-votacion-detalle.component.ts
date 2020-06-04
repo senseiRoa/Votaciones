@@ -182,5 +182,9 @@ export class RondaVotacionDetalleComponent implements OnInit {
   getUrl(): string {
     return `${document.location.origin}/voto/${this.id}`;
   }
+  retornar() {
+    this.router.navigate([`votacion/${this.ronda.idVotacion}`]);
+  }
+
 }
 

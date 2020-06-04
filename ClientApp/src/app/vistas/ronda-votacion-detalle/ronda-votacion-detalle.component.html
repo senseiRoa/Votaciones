@@ -1,11 +1,19 @@
 <p-toast></p-toast>
 <div class="container" *ngIf="ronda">
   <h1 id="tableLabel"> {{ronda.descripcion}}</h1>
+  <div class="ui-g-12">
+    <button type="button" pButton icon="pi pi-arrow-left" (click)="retornar()" label="Atras"
+      style="float: left;"></button>
+  </div>
   <!-- link localhost:44396/voto/{{id}} <br> -->
-  <a class="nav-link text-dark" [routerLink]="['/voto',id]">votar</a>
+  <div class="ui-g-12">
+    <p style="float: left;">
+      {{getUrl()}}
+      <button type="button" pButton icon="pi pi-clone" (click)="copyMessage()" title="Copiar url para votar"></button>
+    </p>
+  </div>
 
-  {{getUrl()}}
-  <button type="button" pButton icon="pi pi-clone" (click)="copyMessage()" title="Copiar url para votar"></button>
+
   <hr>
   <p-tabView>
     <p-tabPanel header="Resultados">

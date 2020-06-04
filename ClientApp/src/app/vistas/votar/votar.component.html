@@ -8,8 +8,15 @@
 
 
       <div class="ui-g-12" *ngFor="let item of candidatos">
-        <p-radioButton name="group1" value="{{item.id}}" label="{{item.votacionCandidato.candidato.nombre}} "
-          [(ngModel)]="seleccion"></p-radioButton>
+        <div class="ui-g-6">
+          <p-radioButton name="group1" value="{{item.id}}" label="{{item.votacionCandidato.candidato.nombre}} "
+            [(ngModel)]="seleccion"></p-radioButton>
+
+        </div>
+        <div class="ui-g-6">
+          <img src="{{item.votacionCandidato.candidato.urlImage}}" width="80" height="80"
+            *ngIf="item.votacionCandidato.candidato.urlImage!==''">
+        </div>
       </div>
       <hr>
       <div class="ui-g-12">

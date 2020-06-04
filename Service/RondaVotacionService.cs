@@ -137,8 +137,7 @@ namespace Demokratianweb.Service
 
             var result = (from rv in this._applicationDBContext.Set<RondaVotanteEntity>()
                           join v in this._applicationDBContext.Set<ControlVotoVotanteEntity>()
-                          on rv.IdVotacionVotante equals v.IdRondaVotante
-
+                          on rv.Id equals v.IdRondaVotante
                           into joinedList
                           from sub in joinedList.DefaultIfEmpty()
                           where rv.IdRondaVotacion.Equals(rondaId)
@@ -172,7 +171,7 @@ namespace Demokratianweb.Service
                         var votante = (from x in this._applicationDBContext.Set<VotanteEntity>()
                                        join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante
                                        join rv in this._applicationDBContext.Set<RondaVotanteEntity>() on vv.Id equals rv.IdVotacionVotante
-                                       where vv.IdVotacion.Equals(rondaVotacion.IdVotacion) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
+                                       where rv.IdRondaVotacion.Equals(rondaVotacion.Id) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
                                        select rv
                                      ).FirstOrDefault();
                         if (votante != null)
