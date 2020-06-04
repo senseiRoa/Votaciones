@@ -130,23 +130,25 @@ namespace Demokratianweb.Service
 
         }
 
-        public List<RondaVotanteEntity> GetAllmissingVotersByRondaId(Guid rondaId)
+        public List<RondaVotanteWrapper> GetAllmissingVotersByRondaId(Guid rondaId)
         {
             //https://stackoverflow.com/questions/16166151/join-subquery-result-in-linq
             //https://stackoverflow.com/questions/33961414/left-join-on-two-lists-and-maintain-one-property-from-the-right-with-linq
 
             var result = (from rv in this._applicationDBContext.Set<RondaVotanteEntity>()
                           join v in this._applicationDBContext.Set<ControlVotoVotanteEntity>()
-                          on rv.IdVotacionVotante equals v.IdVotacionVotante
+                          on rv.IdVotacionVotante equals v.IdRondaVotante
 
                           into joinedList
                           from sub in joinedList.DefaultIfEmpty()
                           where rv.IdRondaVotacion.Equals(rondaId)
                           orderby rv.VotacionVotante.Votante.Nombre
-                          select rv
+                          select new RondaVotanteWrapper
+                          {
+                              Votante = rv.VotacionVotante.Votante.Nombre,
+                              EstadoVoto = sub.RondaVotante != null
+                          }
                         )
-                        .Include(i => i.VotacionVotante)
-                        .Include(i => i.VotacionVotante.Votante)
                         .ToList();
 
             return result;
@@ -171,7 +173,7 @@ namespace Demokratianweb.Service
                                        join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante
                                        join rv in this._applicationDBContext.Set<RondaVotanteEntity>() on vv.Id equals rv.IdVotacionVotante
                                        where vv.IdVotacion.Equals(rondaVotacion.IdVotacion) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
-                                       select vv
+                                       select rv
                                      ).FirstOrDefault();
                         if (votante != null)
                         {
@@ -179,7 +181,7 @@ namespace Demokratianweb.Service
 
                             var continuar =
                             this._applicationDBContext.Set<ControlVotoVotanteEntity>()
-                            .Where(i => i.IdRondaVotacion.Equals(entity.RondaId) && i.IdVotacionVotante.Equals(votante.Id))
+                            .Where(i => i.IdRondaVotacion.Equals(entity.RondaId) && i.IdRondaVotante.Equals(votante.Id))
                             .Count();
 
                             if (continuar == 0)
@@ -200,7 +202,7 @@ namespace Demokratianweb.Service
                                 {
                                     Id = Guid.NewGuid(),
                                     IdRondaVotacion = entity.RondaId,
-                                    IdVotacionVotante = votante.Id,
+                                    IdRondaVotante = votante.Id,
 
                                     ///////////////////////////////////////
                                     EstadoRegistro = Data.Enums.HelpConstantes.EstadoRegistro.Activo,

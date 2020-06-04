@@ -53,11 +53,11 @@ export class VotacionComponent implements OnInit {
     this.entity.votacion = {} as VotacionModel;
     try {
       const result = await this.votanteService.getAllAsync() as ResponseApi;
-      this.votantes = result.message.map(v => ({ label: v.correo, value: v.id }));
+      this.votantes = result.message.map(v => ({ label: v.nombre, value: v.id }));
 
 
       const result2 = await this.candidatoService.getAllAsync() as ResponseApi;
-      this.candidatos = result2.message.map(c => ({ label: c.nombre, value: c.id }));
+      this.candidatos = result2.message.map(c => ({ label: c.nombre + ' - ' + c.descripcion, value: c.id }));
     } catch (error) {
 
       console.log(error);

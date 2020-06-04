@@ -5,6 +5,8 @@ import { RondaVotacionService } from 'src/app/servicios/ronda-votacion.service';
 import { ResponseApi } from 'src/app/model/response';
 import { RondaVotacionModel } from 'src/app/model/RondaVotacionModel';
 import { RondaCandidatoModel } from 'src/app/model/RondaCandidatoModel';
+import { RondaVotanteModel } from 'src/app/model/RondaVotanteModel';
+import { RondaVotanteWrapper } from 'src/app/model/RondaVotanteWrapper';
 
 
 @Component({
@@ -18,6 +20,9 @@ export class RondaVotacionDetalleComponent implements OnInit {
   data2: any;
   ronda: RondaVotacionModel;
   candidatos: RondaCandidatoModel[];
+  votantes: RondaVotanteModel[];
+  votantesEstadoVotos: RondaVotanteWrapper[];
+  showResult = false;
 
   constructor(private rutaActiva: ActivatedRoute,
     private rondaVotacionService: RondaVotacionService,
@@ -49,6 +54,14 @@ export class RondaVotacionDetalleComponent implements OnInit {
         }
       });
 
+      this.rondaVotacionService.getAllVotantesByRondaId(this.id).subscribe(response => {
+        if (response.status === true) {
+          this.votantes = response.message;
+
+
+        }
+      });
+
       this.cargarResultados();
 
 
@@ -57,39 +70,50 @@ export class RondaVotacionDetalleComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
     }
   }
-
+  cargarvotantespendientes() { }
 
   cargarResultados() {
     try {
+      // todo: mensaje de error
+      this.rondaVotacionService.getAllVotantesPendientesByRondaId(this.id).subscribe(response => {
 
-
-      this.rondaVotacionService.getResultados(this.id).subscribe(response => {
         if (response.status === true) {
-          const resultados = response.message;
+          this.votantesEstadoVotos = response.message;
+          this.showResult = this.votantesEstadoVotos.filter(i => i.estadoVoto === false).length === 0;
+          if (this.showResult === true) {
+            this.rondaVotacionService.getResultados(this.id).subscribe(response => {
+              if (response.status === true) {
+                const resultados = response.message;
 
-          this.data = {
-            labels: resultados.candidatos,
-            datasets: [
-              {
-                data: resultados.votos,
-                backgroundColor: this.paleta(resultados.candidatos.length)
-              }],
-          };
+                this.data = {
+                  labels: resultados.candidatos,
+                  datasets: [
+                    {
+                      data: resultados.votos,
+                      backgroundColor: this.paleta(resultados.candidatos.length)
+                    }],
+                };
 
-          this.data2 = {
-            labels: resultados.candidatos,
-            datasets: [
-              {
-                label: 'Total votos' + resultados.totalVotos,
-                backgroundColor: '#42A5F5',
-                borderColor: '#1E88E5',
-                data: resultados.votos
-              },
+                this.data2 = {
+                  labels: resultados.candidatos,
+                  datasets: [
+                    {
+                      label: 'Total votos' + resultados.totalVotos,
+                      backgroundColor: '#42A5F5',
+                      borderColor: '#1E88E5',
+                      data: resultados.votos
+                    },
 
-            ]
-          };
+                  ]
+                };
+              }
+            });
+          }
         }
       });
+
+
+
 
 
 

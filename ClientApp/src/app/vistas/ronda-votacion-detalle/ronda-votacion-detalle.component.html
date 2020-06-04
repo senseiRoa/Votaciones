@@ -5,8 +5,7 @@
   <a class="nav-link text-dark" [routerLink]="['/voto',id]">votar</a>
 
   {{getUrl()}}
-  <button type="button" pButton icon="pi pi-clone" (click)="copyMessage()" title="Copiar url para votar"
-            ></button>
+  <button type="button" pButton icon="pi pi-clone" (click)="copyMessage()" title="Copiar url para votar"></button>
   <hr>
   <p-tabView>
     <p-tabPanel header="Resultados">
@@ -17,13 +16,37 @@
             style="float: right;"></button>
         </div>
 
-        <div class="ui-g-12">
-          <p-chart type="horizontalBar" [data]="data2"></p-chart>
-        </div>
-        <div class="ui-g-12">
-          <p-chart type="pie" [data]="data"></p-chart>
+        <div class="ui-g-12" *ngIf="showResult;else pending">
+
+          <div class="ui-g-12">
+            <p-chart type="horizontalBar" [data]="data2"></p-chart>
+          </div>
+          <div class="ui-g-12">
+            <p-chart type="pie" [data]="data"></p-chart>
+          </div>
         </div>
 
+        <ng-template #pending>
+          <h3>Estado de las votaciones</h3>
+
+          <div class="ui-g-12">
+            <ul>
+              <li *ngFor="let item of votantesEstadoVotos">
+                <p-message severity="{{item.estadoVoto===true?'success':'warn'}}" text="{{item.votante}}"></p-message>
+              </li>
+            </ul>
+          </div>
+        </ng-template>
+
+
+
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Votantes">
+      <div class="ui-g">
+        <ul>
+          <li *ngFor="let item of votantes">{{item.votacionVotante.votante.nombre}} </li>
+        </ul>
       </div>
     </p-tabPanel>
     <p-tabPanel header="Candidatos">

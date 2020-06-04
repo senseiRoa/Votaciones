@@ -17,9 +17,9 @@ namespace Demokratianweb.Data.Entities
         public Guid IdRondaVotacion { get; set; }
         public virtual RondaVotacionEntity RondaVotacion { get; set; }
 
-        [ForeignKey("VotacionVotante")]
-        public Guid IdVotacionVotante { get; set; }
-        public virtual VotacionVotanteEntity VotacionVotante { get; set; }
+        [ForeignKey("RondaVotante")]
+        public Guid IdRondaVotante { get; set; }
+        public virtual RondaVotanteEntity RondaVotante { get; set; }
     }
    
 }

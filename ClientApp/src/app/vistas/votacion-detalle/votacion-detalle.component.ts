@@ -22,6 +22,7 @@ export class VotacionDetalleComponent implements OnInit {
   votacion: VotacionModel;
   candidatos: VotacionCandidatoModel[];
   candidatosModal: SelectItem[];
+  votantesModel: SelectItem[];
   votantes: VotacionVotanteModel[];
   rondas: VotacionModel;
   displayDialog: boolean;
@@ -82,6 +83,9 @@ export class VotacionDetalleComponent implements OnInit {
     try {
 
       this.candidatosModal = this.candidatos.map(c => ({ label: c.candidato.nombre, value: c.id }));
+      this.votantesModel = this.votantes.map(v => ({ label: v.votante.nombre, value: v.id }));
+
+      this.rondaEntity.votantes = this.votantesModel.map(v => v.value);
     } catch (error) {
 
       console.log(error);

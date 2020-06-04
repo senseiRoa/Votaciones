@@ -23,6 +23,12 @@ export class RondaVotacionService extends GenericService {
   public getAllCandidatosByRondaId(id: any): Observable<any> {
     return this.httpClient.get(this.apiURL + '/' + id + '/candidatos');
   }
+  public getAllVotantesByRondaId(id: any): Observable<any> {
+    return this.httpClient.get(this.apiURL + '/' + id + '/votantes');
+  }
+  public getAllVotantesPendientesByRondaId(id: any): Observable<any> {
+    return this.httpClient.get(this.apiURL + '/' + id + '/votantespendientes');
+  }
 
   public getResultados(id: any): Observable<any> {
     return this.httpClient.get(this.apiURL + '/' + id + '/resultados');

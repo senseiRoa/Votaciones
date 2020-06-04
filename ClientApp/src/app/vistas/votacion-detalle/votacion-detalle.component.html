@@ -67,12 +67,17 @@
     <div class="ui-g-12">
 
 
-      <div class="ui-g-6">
+      <div class="ui-g-4">
         <label for="year">Descripción</label><br>
         <input pInputText id="year" [(ngModel)]="rondaEntity.rondavotacion.descripcion" />
       </div>
 
-      <div class="ui-g-6">
+      <div class="ui-g-4">
+        <label>Votantes</label><br>
+        <p-multiSelect [options]="votantesModel" [(ngModel)]="rondaEntity.votantes" defaultLabel="Seleccione una opción" appendTo="body"></p-multiSelect>
+      </div>
+
+      <div class="ui-g-4">
         <label>Candidatos</label><br>
         <p-multiSelect [options]="candidatosModal" [(ngModel)]="rondaEntity.candidatos" defaultLabel="Seleccione una opción" appendTo="body">
         </p-multiSelect>
