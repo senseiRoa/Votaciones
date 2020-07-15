@@ -19,8 +19,15 @@ export class VotacionComponent implements OnInit {
   displayDialog = false;
   entity: VotacionWrapperModel;
   votaciones: VotacionModel[];
+  isBusy = false;
   votantes: SelectItem[];
   candidatos: SelectItem[];
+  minFI = new Date();
+  minFF :Date;
+  
+
+  
+
   constructor(private votacionService: VotacionService,
     private candidatoService: CandidatoService,
     private votanteService: VotanteService,
@@ -93,7 +100,7 @@ export class VotacionComponent implements OnInit {
         guardar = false;
       }
       if (guardar === true) {
-
+        this.isBusy = true;
         const result = await this.votacionService.createAsync(this.entity) as ResponseApi;
         if (result.status === true) {
 
@@ -113,6 +120,8 @@ export class VotacionComponent implements OnInit {
 
       console.log(error);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
+    } finally {
+      this.isBusy = false;
     }
   }
 

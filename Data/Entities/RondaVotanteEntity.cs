@@ -22,3 +22,4 @@ namespace Demokratianweb.Data.Entities
         public virtual VotacionVotanteEntity VotacionVotante { get; set; }
     }
 }
+    

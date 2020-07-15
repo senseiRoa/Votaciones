@@ -59,12 +59,12 @@
       <div class="ui-g-6">
         <label>Fecha Inicial</label><br>
         <p-calendar [(ngModel)]="entity.votacion.fechaInicial" dateFormat="dd-mm-yy" [locale]="es" [showTime]="true"
-          appendTo="body"></p-calendar>
+          appendTo="body" [minDate]="minFI"></p-calendar>
       </div>
       <div class="ui-g-6">
         <label>Fecha Final</label><br>
         <p-calendar [(ngModel)]="entity.votacion.fechaFinal" dateFormat="dd-mm-yy" [locale]="es" [showTime]="true"
-          appendTo="body"></p-calendar>
+          appendTo="body" [minDate]="entity.votacion.fechaInicial"></p-calendar>
       </div>
 
     </div>
@@ -85,7 +85,7 @@
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Crear" ></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Crear" [disabled]="isBusy" ></button>
     </div>
   </p-footer>
 </p-dialog>
