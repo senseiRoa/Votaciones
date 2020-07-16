@@ -11,6 +11,7 @@ import { VotacionService } from 'src/app/servicios/votacion.service';
 import { ResponseApi } from 'src/app/model/response';
 import { MessageService, SelectItem } from 'primeng/api';
 import { RondaVotacionModel } from 'src/app/model/RondaVotacionModel';
+import { RondaModel } from 'src/app/model/RondaModel';
 
 @Component({
   selector: 'app-votacion-detalle',
@@ -24,7 +25,7 @@ export class VotacionDetalleComponent implements OnInit {
   candidatosModal: SelectItem[];
   votantesModel: SelectItem[];
   votantes: VotacionVotanteModel[];
-  rondas: VotacionModel;
+  rondas: RondaModel[];
   displayDialog: boolean;
   rondaEntity: RondaVotacionWrapperModel;
   constructor(private rutaActiva: ActivatedRoute,
@@ -101,7 +102,11 @@ export class VotacionDetalleComponent implements OnInit {
         guardar = false;
       }
 
-      if (this.rondaEntity.candidatos == null || this.rondaEntity.candidatos === []) {
+      if (this.rondaEntity.votantes == null || this.rondaEntity.votantes.length === 0) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El campo votantes es requerido' });
+        guardar = false;
+      }
+      if (this.rondaEntity.candidatos == null || this.rondaEntity.candidatos.length === 0) {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El campo Candidatos es requerido' });
         guardar = false;
       }
@@ -117,7 +122,7 @@ export class VotacionDetalleComponent implements OnInit {
 
         } else {
 
-          this.messageService.add({ severity: 'error', summary: 'error', detail: 'Hubo un error creando la votación' });
+          this.messageService.add({ severity: 'error', summary: 'error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
         }
 
       }
@@ -125,7 +130,11 @@ export class VotacionDetalleComponent implements OnInit {
     } catch (error) {
 
       console.log(error);
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
+      if (error.error.message) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
+      }
     }
   }
 }

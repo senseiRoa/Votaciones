@@ -18,8 +18,8 @@ namespace Demokratianweb.Data.Enums
         public enum EstadoVotacion
         {
             Cerrada,
-            Abierta,
-            Anulada,
+            Abierta
+            //Anulada,
 
         } public enum EstadoRegistro
         {

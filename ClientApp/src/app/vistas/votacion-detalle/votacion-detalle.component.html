@@ -1,7 +1,8 @@
 <p-toast></p-toast>
 <div class="container" *ngIf="votacion">
-  <h1 id="tableLabel">Votacion: {{votacion.nombre}}</h1>
+  <h1 id="tableLabel"> {{votacion.nombre}}</h1>
   <p>{{votacion.descripcion}}</p>
+  <p>Estado Votación:{{votacion.estado===1?'Abierta':'Cerrada'}}</p>
   <p>Fecha inicial:{{votacion.fechaInicial | date:'medium'}}</p>
   <p>Fecha final:{{votacion.fechaFinal | date:'medium'}}</p>
 
@@ -14,7 +15,7 @@
 
         <div class="ui-g-12">
           <div style="text-align:right">
-            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Ronda"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Ronda" [disabled]="votacion.estado===0"></button>
           </div>
         </div>
 
@@ -27,12 +28,14 @@
           <ng-template pTemplate="header">
             <tr>
               <th>Descripción</th>
+              <th>Estado</th>
               <th>-</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-ronda>
             <tr>
               <td>{{ ronda.descripcion}}</td>
+              <td>{{ ronda.estado===0?'Cerrada':'Abierta'}}</td>
               <td>
                 <button type="button" pButton icon="pi pi-search" [routerLink]='["/ronda",ronda.id]'></button>
               </td>

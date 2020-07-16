@@ -4,4 +4,5 @@ export interface VotacionModel {
   descripcion: string;
   fechaInicial: Date;
   fechaFinal: Date;
+  estado: number;
 }

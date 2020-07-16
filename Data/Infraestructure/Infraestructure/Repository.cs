@@ -61,9 +61,6 @@ namespace Demokratianweb.Data.Infraestructure
                     throw new ArgumentNullException("entity");
                 }
                 entity.fechaEdicion = DateTime.Now;
-
-
-
                 context.Entry(entity).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;

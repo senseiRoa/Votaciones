@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using static Demokratianweb.Data.Enums.HelpConstantes;
 
 namespace Demokratianweb.Service
 {
@@ -21,6 +22,11 @@ namespace Demokratianweb.Service
         public Boolean AddRondaVotacion(RondaVotacionWrapper entity)
         {
             var registro = false;
+            var validate = validateStatusVotacion(entity.Rondavotacion.IdVotacion);
+            if (!validate)
+            {
+                throw new Exception("Error:La votación no existe o esta cerrada, no se puede crear una nueva ronda");
+            }
             try
             {
 
@@ -65,13 +71,28 @@ namespace Demokratianweb.Service
                                         }
                                      ).ToList();
 
-
+                        //crear ronda
                         this._applicationDBContext.Add(entity.Rondavotacion);
+
+                        // crear candidatos ronda
                         this._applicationDBContext.AddRange(candidatos);
+
+                        // crear votantes ronda
                         this._applicationDBContext.AddRange(votantes);
 
 
+
+
+                        // cerrar rondas anteriores
+                        var resultAllRondas = this._applicationDBContext.Set<RondaVotacionEntity>().Where(x => x.IdVotacion.Equals(entity.Rondavotacion.IdVotacion)).ToList();
+                        resultAllRondas.ForEach(x => x.Estado = Data.Enums.HelpConstantes.EstadoRondaVotacion.Cerrada);
+
+                        this._applicationDBContext.UpdateRange(resultAllRondas);
+
+
+                        //guardar todo
                         this._applicationDBContext.SaveChanges();
+
 
 
                         transaction.Commit();
@@ -92,6 +113,19 @@ namespace Demokratianweb.Service
                 throw ex;
             }
             return registro;
+        }
+
+        private Boolean validateStatusVotacion(Guid votacionId)
+        {
+            var result = this._applicationDBContext.Set<VotacionEntity>().Where(x => x.Id.Equals(votacionId)).FirstOrDefault();
+
+            return result != null && 
+                DateTime.Compare(DateTime.Now, result.fechaInicial) >= 0 &&
+                DateTime.Compare(DateTime.Now, result.fechaFinal) <= 0 &&
+                result.Estado.Equals(EstadoVotacion.Abierta);
+
+
+
         }
 
         public List<RondaCandidatoEntity> GetAllCandidatosByRondaId(Guid rondaId)
@@ -167,6 +201,17 @@ namespace Demokratianweb.Service
                         var rondaVotacion = this._applicationDBContext.Set<RondaVotacionEntity>()
                             .Where(i => i.Id.Equals(entity.RondaId))
                             .FirstOrDefault();
+
+                        var validate = validateStatusVotacion(rondaVotacion.IdVotacion);
+                        if (!validate)
+                        {
+                            throw new Exception("Error:La votación no existe o esta cerrada, no se puede votar en esta ronda");
+                        }
+
+                        if (rondaVotacion.Estado.Equals(EstadoRondaVotacion.Cerrada))
+                        {
+                            throw new Exception("Error:no se puede votar cuando la Ronda esta cerrada");
+                        }
 
                         var votante = (from x in this._applicationDBContext.Set<VotanteEntity>()
                                        join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante

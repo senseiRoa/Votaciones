@@ -25,6 +25,9 @@ export abstract class GenericService {
     const entityJson = JSON.stringify(entity);
     return await this.httpClient.put<any>(this.apiURL + '/' + id, entityJson, { headers: reqHeaders }).toPromise();
   }
+
+
+
   public async deleteAsync(id: any): Promise<any> {
     return await this.httpClient.delete<any>(this.apiURL + '/' + id).toPromise();
   }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static Demokratianweb.Data.Enums.HelpConstantes;
 
 namespace Demokratianweb.Controllers
 {
@@ -46,8 +47,14 @@ namespace Demokratianweb.Controllers
         {
             try
             {
+
+                this._votacionService.UpdateStatus();
+
+
                 var entityList = this._votacionRepository.GetAll()
-                    .OrderByDescending(i=>i.fechaCreacion);
+                    .OrderByDescending(i => i.fechaCreacion);
+
+
                 return Ok(new { status = true, message = entityList });
             }
             catch (Exception ex)
@@ -133,11 +140,20 @@ namespace Demokratianweb.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put(VotacionEntity entity)
+        [Route("{id}")]
+        public ActionResult Put(VotacionEntity entity, Guid id)
         {
             try
             {
-                var response = this._votacionRepository.Update(entity);
+                var validation = this._votacionService.validateEntity(entity);
+                if (!validation)
+                {
+                    throw new Exception("Datos incompletos para registrar la Votación");
+                }
+
+                entity.Estado = DateTime.Compare(DateTime.Now, entity.fechaInicial) >=0 && DateTime.Compare(DateTime.Now, entity.fechaFinal) <= 0 ? EstadoVotacion.Abierta : EstadoVotacion.Cerrada;
+
+                var response = this._votacionRepository.Update(id, entity);
                 if (response)
                 {
                     return Ok(new { status = true, message = entity });
@@ -149,6 +165,23 @@ namespace Demokratianweb.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(new { status = true, message = ex.Message });
+            }
+
+        }
+
+        [HttpPut]
+        [Route("ActualizacionEstado")]
+        public ActionResult UpdateStatus()
+        {
+            try
+            {
+                var count = this._votacionService.UpdateStatus();
+                return Ok(new { status = true, message = $"Se actualizó {count} registro(s)" });
+            }
+            catch (Exception ex)
+            {
+
                 return BadRequest(new { status = true, message = ex.Message });
             }
 

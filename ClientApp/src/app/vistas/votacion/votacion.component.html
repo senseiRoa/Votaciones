@@ -1,12 +1,14 @@
+
 <p-toast></p-toast>
+<p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle" width="425" [acceptLabel]="'Si'"></p-confirmDialog>
 <div class="container">
   <h1 id="tableLabel">Votaciones</h1>
-  <p>This component demonstrates fetching data from the server.</p>
-  <p>Table is just a mapping of objects to table rows with <code>ngFor</code></p>
+  <!--<p>This component demonstrates fetching data from the server.</p>
+  <p>Table is just a mapping of objects to table rows with <code>ngFor</code></p>-->
 
   <div class="container">
     <div style="text-align:right">
-      <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Votación"></button>
+      <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Votación" class="ui-button-success"></button>
     </div>
   </div>
   <p-table [value]="votaciones">
@@ -20,8 +22,10 @@
         <th>Descripción</th>
         <th>Fecha Inicial</th>
         <th>Fecha Final</th>
+        <th>Estado</th>
         <th>-</th>
       </tr>
+
     </ng-template>
     <ng-template pTemplate="body" let-votacion>
       <tr>
@@ -29,8 +33,23 @@
         <td>{{ votacion.descripcion}}</td>
         <td>{{ votacion.fechaInicial | date:'medium'}}</td>
         <td>{{ votacion.fechaFinal | date:'medium'}}</td>
+        <td>{{ votacion.estado===1?'Abierta':'Cerrada'}}</td>
+
         <td>
-          <button type="button" pButton icon="pi pi-search" [routerLink]='["/votacion",votacion.id]'></button>
+          <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+              <button type="button" pButton icon="pi pi-search" [routerLink]='["/votacion",votacion.id]' title="Detalle"></button>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+              <button type="button" pButton icon="pi pi-pencil" (click)="showDialogToUpdate(votacion)" title="Editar"></button>
+
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+              <button type="button" pButton icon="pi pi-trash" (click)="confirmDelete(votacion.id)" title="Eliminar" class="ui-button-danger"></button>
+
+            </div>
+          </div>
         </td>
       </tr>
     </ng-template>
@@ -40,7 +59,7 @@
 
 
 <p-dialog header="Nueva Votación" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true"
-  showEffect="fade" [modal]="true" [style]="{width: '600px'}">
+          showEffect="fade" [modal]="true" [style]="{width: '600px'}">
   <div class="ui-g ui-fluid" *ngIf="entity">
     <div class="ui-g-12">
 
@@ -59,12 +78,12 @@
       <div class="ui-g-6">
         <label>Fecha Inicial</label><br>
         <p-calendar [(ngModel)]="entity.votacion.fechaInicial" dateFormat="dd-mm-yy" [locale]="es" [showTime]="true"
-          appendTo="body" [minDate]="minFI"></p-calendar>
+                    appendTo="body" [minDate]="minFI"></p-calendar>
       </div>
       <div class="ui-g-6">
         <label>Fecha Final</label><br>
         <p-calendar [(ngModel)]="entity.votacion.fechaFinal" dateFormat="dd-mm-yy" [locale]="es" [showTime]="true"
-          appendTo="body" [minDate]="entity.votacion.fechaInicial"></p-calendar>
+                    appendTo="body" [minDate]="entity.votacion.fechaInicial"></p-calendar>
       </div>
 
     </div>
@@ -85,7 +104,45 @@
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Crear" [disabled]="isBusy" ></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Crear" [disabled]="isBusy"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Editar Votación" [(visible)]="displayDialogEdit" [focusOnShow]="false" [responsive]="true"
+          showEffect="fade" [modal]="true" [style]="{width: '600px'}">
+  <div class="ui-g ui-fluid" *ngIf="entity">
+    <div class="ui-g-12">
+
+      <div class="ui-g-6">
+        <label for="vin">Nombre</label><br>
+        <input pInputText id="vin" [(ngModel)]="entity.votacion.nombre" autofocus />
+      </div>
+      <div class="ui-g-6">
+        <label for="year">Descripción</label><br>
+        <input pInputText id="year" [(ngModel)]="entity.votacion.descripcion" />
+      </div>
+
+    </div>
+    <div class="ui-g-12">
+
+
+      <div class="ui-g-6">
+        <label>Fecha Final</label><br>
+        <p-calendar [(ngModel)]="entity.votacion.fechaFinal" dateFormat="dd-mm-yy" [locale]="es" [showTime]="true"
+                    appendTo="body" [minDate]="entity.votacion.fechaInicial"></p-calendar>
+      </div>
+      <div class="ui-g-6">
+
+
+      </div>
+    </div>
+
+
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-check" (click)="update()" label="Actualizar" [disabled]="isBusy"></button>
     </div>
   </p-footer>
 </p-dialog>

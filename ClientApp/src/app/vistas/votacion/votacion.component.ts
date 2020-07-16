@@ -2,7 +2,7 @@ import { map } from 'rxjs/operators';
 import { VotanteService } from './../../servicios/votante.service';
 import { CandidatoService } from './../../servicios/candidato.service';
 import { VotacionWrapperModel } from './../../model/VotacionWrapperModel';
-import { MessageService, SelectItem } from 'primeng/api';
+import { MessageService, SelectItem, ConfirmationService } from 'primeng/api';
 import { ResponseApi } from './../../model/response';
 import { Component, OnInit } from '@angular/core';
 import { VotacionService } from 'src/app/servicios/votacion.service';
@@ -17,20 +17,22 @@ import { VotacionModel } from 'src/app/model/VotacionModel';
 export class VotacionComponent implements OnInit {
   es: any;
   displayDialog = false;
+  displayDialogEdit = false;
   entity: VotacionWrapperModel;
   votaciones: VotacionModel[];
   isBusy = false;
   votantes: SelectItem[];
   candidatos: SelectItem[];
   minFI = new Date();
-  minFF :Date;
-  
+  minFF: Date;
 
-  
+
+
 
   constructor(private votacionService: VotacionService,
     private candidatoService: CandidatoService,
     private votanteService: VotanteService,
+    private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) { }
 
@@ -71,6 +73,21 @@ export class VotacionComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
     }
   }
+
+  async showDialogToUpdate(v : VotacionModel) {
+
+    this.entity = {} as VotacionWrapperModel;
+    this.entity.votacion = {} as VotacionModel;
+    this.entity.votacion.descripcion = v.descripcion;
+    this.entity.votacion.nombre = v.nombre;
+    this.entity.votacion.id = v.id;
+    this.entity.votacion.fechaInicial = new Date(Date.parse(v.fechaInicial.toString()));
+    this.entity.votacion.fechaFinal = new Date(Date.parse(v.fechaFinal.toString()));
+    this.displayDialogEdit = true;
+
+  }
+
+
   async save() {
     try {
       let guardar = true;
@@ -101,6 +118,9 @@ export class VotacionComponent implements OnInit {
       }
       if (guardar === true) {
         this.isBusy = true;
+        this.entity.votacion.fechaInicial = this.transformarFecha(this.entity.votacion.fechaInicial);
+        this.entity.votacion.fechaFinal = this.transformarFecha(this.entity.votacion.fechaFinal);
+
         const result = await this.votacionService.createAsync(this.entity) as ResponseApi;
         if (result.status === true) {
 
@@ -123,6 +143,91 @@ export class VotacionComponent implements OnInit {
     } finally {
       this.isBusy = false;
     }
+  }
+    transformarFecha(fecha: Date): Date {
+      fecha.setMinutes(fecha.getMinutes() - fecha.getTimezoneOffset());
+      return fecha;
+    }
+
+
+
+  async update() {
+    try {
+      let updateProcess = true;
+      //validamos
+      if (this.entity.votacion.nombre === '') {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El campo Nombre es requerido' });
+        updateProcess = false;
+      }
+      if (this.entity.votacion.descripcion === '') {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El campo Descripción es requerido' });
+        updateProcess = false;
+      }
+
+      if (this.entity.votacion.fechaFinal === undefined) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'El campo Fecha Final es requerido' });
+        updateProcess = false;
+      }
+
+      if (updateProcess === true) {
+        this.isBusy = true;
+
+        this.entity.votacion.fechaInicial = this.transformarFecha(this.entity.votacion.fechaInicial);
+        this.entity.votacion.fechaFinal = this.transformarFecha(this.entity.votacion.fechaFinal);
+
+        const result = await this.votacionService.updateAsync(this.entity.votacion,this.entity.votacion.id) as ResponseApi;
+        if (result.status === true) {
+
+          this.messageService.add({ severity: 'success', summary: 'Exito', detail: 'Se Actualizó correctamente el registro de votación' });
+          this.displayDialogEdit = false;
+          this.entity = null;
+          await this.cargarVotaciones();
+
+        } else {
+
+          this.messageService.add({ severity: 'error', summary: 'error', detail: 'Hubo un error actualizando el registro de votación' });
+        }
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
+    } finally {
+      this.isBusy = false;
+    }
+  }
+
+  confirmDelete(id) {
+    this.confirmationService.confirm({
+      message: 'Esta seguro que desea eliminar la votación?',
+      accept: async () => {
+        try {
+         
+
+         
+          this.isBusy = true;
+          const result = await this.votacionService.deleteAsync(id) as ResponseApi;
+            if (result.status === true) {
+
+              this.messageService.add({ severity: 'success', summary: 'Exito', detail: 'Se Eliminó correctamente el registro de votación' });
+              await this.cargarVotaciones();
+            } else {
+              this.messageService.add({ severity: 'error', summary: 'error', detail: 'Hubo un error eliminando el registro de votación' });
+            }
+
+         
+
+        } catch (error) {
+
+          console.log(error);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error cargando la data, intentelo de nuevo' });
+        } finally {
+          this.isBusy = false;
+        }
+      }
+    });
   }
 
 }
