@@ -13,11 +13,15 @@
     <p-tabPanel header="Rondas">
       <div class="ui-g">
 
+
         <div class="ui-g-12">
           <div style="text-align:right">
+            <button type="button" pButton icon="pi pi-file-pdf" (click)="downloadReport()" label="Reporte" style="margin-right: 10px;"></button>
             <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Nueva Ronda" [disabled]="votacion.estado===0"></button>
           </div>
         </div>
+
+
 
 
 

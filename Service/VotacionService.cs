@@ -136,6 +136,22 @@ namespace Demokratianweb.Service
 
         }
 
+        public List<RondaVotacionEntity> GetAllRondas(Guid votacionId)
+        {
+
+
+            var result = (from r in this._applicationDBContext.Set<RondaVotacionEntity>()
+                          where r.IdVotacion.Equals(votacionId)
+                          && r.fechaEliminacion == null && !r.Estado.Equals(EstadoRondaVotacion.Anulada)
+                          orderby r.fechaCreacion descending
+                          select r
+                        ).ToList();
+
+            return result;
+
+        }
+
+
         public int UpdateStatus()
         {
 
@@ -159,9 +175,9 @@ namespace Demokratianweb.Service
 
 
             var result2 = (from v in this._applicationDBContext.Set<VotacionEntity>()
-                          where v.fechaEliminacion == null && v.Estado.Equals(EstadoVotacion.Cerrada)
-                && now >= v.fechaInicial && now <= v.fechaFinal
-                          select v).ToList();
+                           where v.fechaEliminacion == null && v.Estado.Equals(EstadoVotacion.Cerrada)
+                 && now >= v.fechaInicial && now <= v.fechaFinal
+                           select v).ToList();
 
             if (result2.Count > 0)
             {

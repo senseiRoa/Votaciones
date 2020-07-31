@@ -27,7 +27,7 @@
         <div class="ui-g-12" *ngIf="showResult;else pending">
 
           <div class="ui-g-12">
-            <p-chart type="horizontalBar" [data]="data2"></p-chart>
+            <p-chart type="horizontalBar" [data]="data2" [options]="optionsC"></p-chart>
           </div>
           <div class="ui-g-12">
             <p-chart type="pie" [data]="data"></p-chart>

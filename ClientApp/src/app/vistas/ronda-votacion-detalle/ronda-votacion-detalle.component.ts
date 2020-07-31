@@ -23,6 +23,7 @@ export class RondaVotacionDetalleComponent implements OnInit {
   votantes: RondaVotanteModel[];
   votantesEstadoVotos: RondaVotanteWrapper[];
   showResult = false;
+  optionsC: any;
 
   constructor(private rutaActiva: ActivatedRoute,
     private rondaVotacionService: RondaVotacionService,
@@ -31,11 +32,24 @@ export class RondaVotacionDetalleComponent implements OnInit {
   ) {
 
 
+    this.optionsC = {
+      scales: {
+        xAxes: [{
+          display: true,
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1,
+          }
+        }]
+      }
+    };
   }
 
   async ngOnInit() {
     this.id = this.rutaActiva.snapshot.params.id;
     await this.cargarRonda();
+
+
   }
 
   async cargarRonda() {
@@ -81,41 +95,52 @@ export class RondaVotacionDetalleComponent implements OnInit {
           this.votantesEstadoVotos = response.message;
           this.showResult = this.votantesEstadoVotos.filter(i => i.estadoVoto === false).length === 0;
           if (this.showResult === true) {
+
             this.rondaVotacionService.getResultados(this.id).subscribe(response => {
               if (response.status === true) {
-                const resultados = response.message;
+                const respuesta = response.message;
+
+                let candidatosArray = [];
+                let votosArray = [];
+
+                respuesta.resultados.forEach(x => {
+                  candidatosArray.push(x.candidato);
+                  votosArray.push(x.votos);
+                });
+
 
                 this.data = {
-                  labels: resultados.candidatos,
+                  labels: candidatosArray,
                   datasets: [
                     {
-                      data: resultados.votos,
-                      backgroundColor: this.paleta(resultados.candidatos.length)
+                      data: votosArray,
+                      backgroundColor: this.paleta(candidatosArray.length)
                     }],
+
                 };
+
+
 
                 this.data2 = {
-                  labels: resultados.candidatos,
+                  labels: candidatosArray,
                   datasets: [
                     {
-                      label: 'Total votos' + resultados.totalVotos,
+                      label: 'Total votos: ' + respuesta.totalVotos,
                       backgroundColor: '#42A5F5',
                       borderColor: '#1E88E5',
-                      data: resultados.votos
+                      data: votosArray
                     },
 
-                  ]
+                  ],
+
                 };
+
+
               }
             });
           }
         }
       });
-
-
-
-
-
 
     } catch (error) {
       console.log(error);

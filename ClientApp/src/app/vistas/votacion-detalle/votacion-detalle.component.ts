@@ -137,6 +137,22 @@ export class VotacionDetalleComponent implements OnInit {
       }
     }
   }
+  async downloadReport() {
+    try {
+      const blob = await this.votacionService.downloadReport(this.id);
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+
+    } catch (error) {
+
+      console.log(error);
+      if (error.error.message) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error Generando el reporte, intentelo de nuevo' });
+      }
+    }
+  }
 }
 
 

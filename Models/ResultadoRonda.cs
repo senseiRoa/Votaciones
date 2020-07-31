@@ -8,12 +8,18 @@ namespace Demokratianweb.Models
     public class ResultadoRonda
     {
         public int TotalVotos { get; set; }
-        public List<string> Candidatos { get; set; }
-        public List<int> Votos { get; set; }
+        //public List<string> Candidatos { get; set; }
+        //public List<int> Votos { get; set; }
+        public List<ResultTemp> resultados { get; set; }
         public ResultadoRonda()
         {
-            Votos = new List<int>();
-            Candidatos = new List<string>();
+            resultados = new List<ResultTemp>();
+            
         }
+    }
+
+    public class ResultTemp {
+        public int votos { get; set; }
+        public string candidato { get; set; }
     }
 }

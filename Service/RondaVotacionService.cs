@@ -119,7 +119,7 @@ namespace Demokratianweb.Service
         {
             var result = this._applicationDBContext.Set<VotacionEntity>().Where(x => x.Id.Equals(votacionId)).FirstOrDefault();
 
-            return result != null && 
+            return result != null &&
                 DateTime.Compare(DateTime.Now, result.fechaInicial) >= 0 &&
                 DateTime.Compare(DateTime.Now, result.fechaFinal) <= 0 &&
                 result.Estado.Equals(EstadoVotacion.Abierta);
@@ -305,6 +305,8 @@ namespace Demokratianweb.Service
                                        .Distinct()
                                        .ToList();
                 candidatosRonda.Add(new { id = Guid.Empty, candidato = "Voto en Blanco" });
+
+
                 var votos = (from vr in this._applicationDBContext.Set<VotoRondaEntity>()
                              where vr.IdRondaVotacion.Equals(rondaId)
                              select new { idCandidato = vr.idRondaCandidato }
@@ -312,6 +314,7 @@ namespace Demokratianweb.Service
 
 
                 int total = 0;
+                int totalVotos = 0;
                 foreach (var item in candidatosRonda)
                 {
                     if (item.id.Equals(Guid.Empty))
@@ -323,13 +326,17 @@ namespace Demokratianweb.Service
                         total = votos.Where(i => i.idCandidato.Equals(item.id)).Count();
                     }
 
-                    resultado.Candidatos.Add(item.candidato);
-                    resultado.Votos.Add(total);
+                    resultado.resultados.Add(new ResultTemp()
+                    {
+                        votos = total,
+                        candidato = item.candidato
+                    });
+                    totalVotos += total;
 
 
                 }
-                resultado.TotalVotos = resultado.Votos.Sum();
-
+                resultado.TotalVotos =totalVotos;
+                resultado.resultados = resultado.resultados.OrderByDescending(x => x.votos).ToList();
                 return resultado;
 
             }
