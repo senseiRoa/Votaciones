@@ -33,10 +33,10 @@ namespace Demokratianweb
         public void ConfigureServices(IServiceCollection services)
         {
             var cs = Configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine("mi cadena de conexion es :" + cs);
+            //Console.WriteLine("mi cadena de conexion es :" + cs);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(cs));
-
+           
             // repository
             services.AddScoped<CandidatoRepository>();
             services.AddScoped<ControlVotoVotanteRepository>();
@@ -60,9 +60,15 @@ namespace Demokratianweb
                 .AddProfileService<ProfileService>();
 
             services.AddAuthentication()
-                .AddIdentityServerJwt();
+                .AddIdentityServerJwt()
+                
+                ;
             services.AddControllersWithViews();
 
+
+            //mail 
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddTransient<IEmailSender, EmailSender>();
             //services.AddTransient<IProfileService, ProfileService>();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -109,6 +115,7 @@ namespace Demokratianweb
 
             app.UseAuthentication();
             app.UseIdentityServer();
+            
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

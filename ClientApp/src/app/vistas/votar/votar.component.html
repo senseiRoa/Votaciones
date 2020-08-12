@@ -15,7 +15,8 @@
         </div>
         <div class="ui-g-6">
           <img src="{{item.votacionCandidato.candidato.urlImage}}" width="80" height="80"
-            *ngIf="item.votacionCandidato.candidato.urlImage!==''">
+            *ngIf="item.votacionCandidato.candidato.urlImage">
+            {{item.votacionCandidato.candidato.urlImage}}
         </div>
       </div>
       <hr>
