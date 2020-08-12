@@ -16,3 +16,15 @@ volumes:
   uploadVolume: {}
 
 #docker-compose -f docker-compose.yml up --build -d
+
+
+
+#push image
+#docker tag 2fc103d29800 senseiroa/votaciones-prod:v2
+#docker push senseiroa/votaciones-prod:v2
+#
+
+#ejecutar
+#docker run -d -p 8085:80 --name demokratianwebv2 senseiroa/votaciones-prod:v2
+#
+#

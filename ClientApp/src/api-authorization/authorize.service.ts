@@ -31,6 +31,7 @@ export enum AuthenticationResultStatus {
 
 export interface IUser {
   name?: string;
+  role?: string[];
 }
 
 @Injectable({
@@ -180,7 +181,7 @@ export class AuthorizeService {
     if (!response.ok) {
       throw new Error(`Could not load settings for '${ApplicationName}'`);
     }
-
+    // debugger;
     const settings: any = await response.json();
     settings.automaticSilentRenew = true;
     settings.includeIdTokenInSilentRenew = true;

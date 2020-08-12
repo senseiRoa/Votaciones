@@ -43,6 +43,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ChartModule } from 'primeng/chart';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Role } from './model/RoleEnum';
+import { HasRoleDirective } from './directive/has-role.directive';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ResultadosComponent,
     VotarComponent,
     VotacionDetalleComponent,
-    RondaVotacionDetalleComponent
+    RondaVotacionDetalleComponent,
+    HasRoleDirective
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -68,11 +71,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       // { path: 'counter', component: CounterComponent },
-      { path: 'votacion', component: VotacionComponent, canActivate: [AuthorizeGuard] },
-      { path: 'votacion/:id', component: VotacionDetalleComponent, canActivate: [AuthorizeGuard] },
-      { path: 'ronda/:id', component: RondaVotacionDetalleComponent, canActivate: [AuthorizeGuard] },
-      { path: 'voto/:id', component: VotarComponent, canActivate: [AuthorizeGuard] },
-      { path: 'candidato', component: CandidatoComponent, canActivate: [AuthorizeGuard] },
+      { path: 'votacion', component: VotacionComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
+      { path: 'votacion/:id', component: VotacionDetalleComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
+      { path: 'ronda/:id', component: RondaVotacionDetalleComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
+      { path: 'voto/:id', component: VotarComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Votante] } },
+      { path: 'candidato', component: CandidatoComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
       // { path: 'ronda', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       // { path: 'voto', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       // { path: 'resultado', component: FetchDataComponent, canActivate: [AuthorizeGuard] }

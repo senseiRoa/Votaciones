@@ -18,6 +18,7 @@ export class LoginMenuComponent implements OnInit {
     this.isAuthenticated = this.authorizeService.isAuthenticated();
 
     this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
+     const x= this.authorizeService.getUser().pipe(map(u => u && u.role));
     // this.authorizeService.getUser().subscribe(i => {
     //   const x = i;
     // });

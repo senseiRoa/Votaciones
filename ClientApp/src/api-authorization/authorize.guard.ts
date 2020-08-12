@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthorizeService } from './authorize.service';
-import { tap } from 'rxjs/operators';
+import { Observable, concat } from 'rxjs';
+ import { AuthorizeService } from './authorize.service';
+import { tap, map, subscribeOn } from 'rxjs/operators';
 import { ApplicationPaths, QueryParameterNames } from './api-authorization.constants';
 
 @Injectable({
@@ -14,11 +14,18 @@ export class AuthorizeGuard implements CanActivate {
   canActivate(
     _next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      return this.authorize.isAuthenticated()
-        .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state)));
+
+
+    return this.authorize.isAuthenticated()
+      .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state, _next)));
+
+
   }
 
-  private handleAuthorization(isAuthenticated: boolean, state: RouterStateSnapshot) {
+  private handleAuthorization(isAuthenticated: boolean, state: RouterStateSnapshot, _next: ActivatedRouteSnapshot) {
+
+
+
     if (!isAuthenticated) {
       this.router.navigate(ApplicationPaths.LoginPathComponents, {
         queryParams: {
@@ -26,5 +33,25 @@ export class AuthorizeGuard implements CanActivate {
         }
       });
     }
+
+    this.authorize.getUser().subscribe(u => {
+      let existeRole = false;
+      const authRoles = _next.data.roles;
+      if (u.role) {
+        authRoles.forEach(i => {
+          if (u.role.includes(i)) {
+            existeRole = true;
+          }
+        });
+      }
+
+      if (!existeRole) {
+        this.router.navigate(ApplicationPaths.LoginPathComponents, {
+          queryParams: {
+            [QueryParameterNames.ReturnUrl]: state.url
+          }
+        });
+      }
+    })
   }
 }

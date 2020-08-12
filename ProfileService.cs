@@ -31,6 +31,7 @@ namespace Demokratianweb
             }
 
             context.IssuedClaims.AddRange(roleClaims);
+            context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name,user.UserName));
         }
 
         public Task IsActiveAsync(IsActiveContext context)
