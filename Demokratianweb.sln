@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demokratianweb", "Demokratianweb.csproj", "{29079D8F-F362-4731-860F-779EA1E60BFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "..\WebApplication1\WebApplication1.csproj", "{E9E52656-537E-4B06-B0AF-781082CE4760}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{29079D8F-F362-4731-860F-779EA1E60BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29079D8F-F362-4731-860F-779EA1E60BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29079D8F-F362-4731-860F-779EA1E60BFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9E52656-537E-4B06-B0AF-781082CE4760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9E52656-537E-4B06-B0AF-781082CE4760}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9E52656-537E-4B06-B0AF-781082CE4760}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9E52656-537E-4B06-B0AF-781082CE4760}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
