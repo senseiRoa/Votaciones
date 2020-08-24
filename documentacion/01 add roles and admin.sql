@@ -8,7 +8,7 @@ insert into "AspNetUserRoles" values ('4c7a74f4-fde0-428b-968f-1d19a2d09be6','a0
 
 
 
-INSERT INTO "AspNetUsers" ("Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount") VALUES('02f24c9f-7ba7-4953-990a-ac7ab3d4105a', 'Dra. Damaris Orjuela Herrera', 'DAMARISO@CORTESUPREMA.RAMAJUDICIAL.GOV.CO', 'damariso@cortesuprema.ramajudicial.gov.co', 'DAMARISO@CORTESUPREMA.RAMAJUDICIAL.GOV.CO', true, 'AQAAAAEAACcQAAAAEINQhuxXWIyZegMKOOS/gb/jBUCeN0XLNdILaCUZ0r2vChNporDUdnW58EESEkFkgQ==', 'ZQEQL24ONEDKMY6JCNIIDMXCJDJCNJCU', '134a2876-e2cf-44b6-a622-f5ad86909a31', NULL, false, false, NULL, true, 0);
+INSERT INTO "AspNetUsers" ("Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount") VALUES('02f24c9f-7ba7-4953-990a-ac7ab3d4105a', 'damariso@cortesuprema.ramajudicial.gov.co', 'DAMARISO@CORTESUPREMA.RAMAJUDICIAL.GOV.CO', 'damariso@cortesuprema.ramajudicial.gov.co', 'DAMARISO@CORTESUPREMA.RAMAJUDICIAL.GOV.CO', true, 'AQAAAAEAACcQAAAAEINQhuxXWIyZegMKOOS/gb/jBUCeN0XLNdILaCUZ0r2vChNporDUdnW58EESEkFkgQ==', 'ZQEQL24ONEDKMY6JCNIIDMXCJDJCNJCU', '134a2876-e2cf-44b6-a622-f5ad86909a31', NULL, false, false, NULL, true, 0);
 insert into "AspNetUserRoles" values ('02f24c9f-7ba7-4953-990a-ac7ab3d4105a','a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12');
 
 

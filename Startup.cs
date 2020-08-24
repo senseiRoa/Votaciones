@@ -17,6 +17,7 @@ using Demokratianweb.Data.Infraestructure;
 using Demokratianweb.Service;
 using System;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Demokratianweb
 {
@@ -68,7 +69,7 @@ namespace Demokratianweb
 
             //mail 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, CustomEmailSender>();
             //services.AddTransient<IProfileService, ProfileService>();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
