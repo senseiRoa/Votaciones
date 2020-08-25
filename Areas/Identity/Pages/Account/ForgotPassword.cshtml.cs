@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Demokratianweb.Models;
+using Demokratianweb.Service;
+using Microsoft.AspNetCore.Hosting;
+
 namespace Demokratianweb.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
@@ -18,11 +21,13 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IHostingEnvironment env)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _env = env;
         }
 
         [BindProperty]
@@ -32,6 +37,7 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
+// [Display(Name = "Correo")]
             public string Email { get; set; }
         }
 
@@ -56,15 +62,22 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+                htmlText = htmlText
+                    .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                    .Replace("{user}",user.UserName);
+
+
+                await _emailSender.SendEmailAsync(Input.Email, "Recuperación de Contraseña Demokratian Web", htmlText);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
             return Page();
         }
+
     }
+
 }
+
