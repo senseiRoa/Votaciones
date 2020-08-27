@@ -45,6 +45,7 @@ import { ChartModule } from 'primeng/chart';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Role } from './model/RoleEnum';
 import { HasRoleDirective } from './directive/has-role.directive';
+import { DetallerondasComponent } from './vistas/detallerondas/detallerondas.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { HasRoleDirective } from './directive/has-role.directive';
     VotarComponent,
     VotacionDetalleComponent,
     RondaVotacionDetalleComponent,
+    DetallerondasComponent,
     HasRoleDirective
   ],
   imports: [
@@ -75,6 +77,7 @@ import { HasRoleDirective } from './directive/has-role.directive';
       { path: 'votacion/:id', component: VotacionDetalleComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
       { path: 'ronda/:id', component: RondaVotacionDetalleComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
       { path: 'voto/:id', component: VotarComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Votante] } },
+      { path: 'detalleronda', component: DetallerondasComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Votante] } },
       { path: 'candidato', component: CandidatoComponent, canActivate: [AuthorizeGuard], data: { roles: [Role.Admin, Role.Moderador] } },
       // { path: 'ronda', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       // { path: 'voto', component: FetchDataComponent, canActivate: [AuthorizeGuard] },

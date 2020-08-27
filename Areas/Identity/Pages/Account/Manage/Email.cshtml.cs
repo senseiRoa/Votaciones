@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Demokratianweb.Models;
+using Demokratianweb.Service;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Demokratianweb.Areas.Identity.Pages.Account.Manage
 {
@@ -19,15 +21,17 @@ namespace Demokratianweb.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
 
         public EmailModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IHostingEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            this._env = env;
         }
 
         public string Username { get; set; }
@@ -99,10 +103,17 @@ namespace Demokratianweb.Areas.Identity.Pages.Account.Manage
                     pageHandler: null,
                     values: new { userId = userId, email = Input.NewEmail, code = code },
                     protocol: Request.Scheme);
+                var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+                htmlText = htmlText
+                    .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                    .Replace("{email}", user.Email);
+
+
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Confirme su Correo Electrónico",
+                    htmlText);
 
                 StatusMessage = "Confirmation link to change email sent. Please check your email.";
                 return RedirectToPage();
@@ -135,10 +146,17 @@ namespace Demokratianweb.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
+
+            var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+            htmlText = htmlText
+                .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                .Replace("{email}", user.Email);
+
             await _emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "Confirme su Correo Electrónico ",
+               htmlText);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();

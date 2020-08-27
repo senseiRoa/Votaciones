@@ -7,6 +7,8 @@ import { RondaVotacionModel } from 'src/app/model/RondaVotacionModel';
 import { RondaCandidatoModel } from 'src/app/model/RondaCandidatoModel';
 import { RondaVotanteModel } from 'src/app/model/RondaVotanteModel';
 import { RondaVotanteWrapper } from 'src/app/model/RondaVotanteWrapper';
+import { NotificationRTService } from 'src/app/servicios/NotificationRT.service';
+import { MessageRT } from 'src/app/model/MessageRT';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class RondaVotacionDetalleComponent implements OnInit {
   constructor(private rutaActiva: ActivatedRoute,
     private rondaVotacionService: RondaVotacionService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private notificationRTService: NotificationRTService
   ) {
 
 
@@ -43,6 +46,7 @@ export class RondaVotacionDetalleComponent implements OnInit {
         }]
       }
     };
+    this.subscribeToEvents();
   }
 
   async ngOnInit() {
@@ -210,6 +214,23 @@ export class RondaVotacionDetalleComponent implements OnInit {
   retornar() {
     this.router.navigate([`votacion/${this.ronda.idVotacion}`]);
   }
+
+
+
+
+
+  private subscribeToEvents(): void {
+
+    this.notificationRTService.NuevoVotoReceived.subscribe((message: MessageRT) => {
+      if (message.rondaId === this.id) {
+        this.cargarResultados();
+        this.messageService.add({ severity: message.type, summary: message.payload, detail: message.summary });
+      }
+    });
+
+
+  }
+
 
 }
 

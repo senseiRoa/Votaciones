@@ -18,6 +18,7 @@ namespace Demokratianweb.Service
                     name = "htmlTemplateForgotPassword.html";
                     break;
                 case HtmlTemplate.ConfirmEmail:
+                    name = "htmlTemplateConfirmEmail.html";
                     break;
                 default:
                     break;

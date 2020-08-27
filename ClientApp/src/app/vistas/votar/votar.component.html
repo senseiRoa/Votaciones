@@ -1,7 +1,9 @@
 <p-toast></p-toast>
-<div class="container" *ngIf="id">
-  <h1>Seleccione una opción</h1>
+<div class="container" *ngIf="id && validacion.estado">
+  <h1> {{ronda.descripcion}} - {{ronda.id}}</h1>
+  <br>
 
+  <h3>Seleccione una opción y de click en el boton votar</h3>
   <p-panel header="Candidatos" *ngIf="candidatos">
     <div class="ui-g">
 
@@ -33,3 +35,10 @@
 
 
 </div>
+
+<div class="container" *ngIf="!validacion.estado ">
+  <h1>{{validacion.mensaje}}</h1>
+  <button type="button" pButton icon="pi pi-check" (click)="volver()" label="Volver"></button>
+</div>
+
+

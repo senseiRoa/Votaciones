@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RondaVotacionService } from 'src/app/servicios/ronda-votacion.service';
 import { MessageService } from 'primeng/api';
 import { VotoWrapperModel } from 'src/app/model/VotoWrapperModel';
+import { RondaVotacionModel } from 'src/app/model/RondaVotacionModel';
+import { ResponseApi } from 'src/app/model/response';
 
 @Component({
   selector: 'app-votar',
@@ -13,9 +15,12 @@ import { VotoWrapperModel } from 'src/app/model/VotoWrapperModel';
 export class VotarComponent implements OnInit {
 
   id: any;
+  ronda: RondaVotacionModel;
   ocupado = false;
   candidatos: RondaCandidatoModel[];
   seleccion: string;
+  validacion = { estado: false, mensaje: '' };
+
   constructor(
     private rutaActiva: ActivatedRoute,
     private messageService: MessageService,
@@ -30,11 +35,43 @@ export class VotarComponent implements OnInit {
   }
   async cargarDatos() {
 
-    this.rondaVotacionService.getAllCandidatosByRondaId(this.id).subscribe(response => {
-      if (response.status === true) {
-        this.candidatos = response.message;
+    try {
+      const result = await this.rondaVotacionService.getByIdAsync(this.id) as ResponseApi;
+
+      if (result.status === true) {
+        this.ronda = result.message;
+        this.validacion.estado = true;
+        if (this.ronda.estado === 0) {
+
+          this.validacion.estado = false;
+          this.validacion.mensaje = 'La ronda actualmente está  cerrada, por lo que no es posible realizar la votación';
+          return;
+        }
+        const puedevotar = true;
+        if (!puedevotar) {
+
+          this.validacion.estado = false;
+          this.validacion.mensaje = 'Usted no puede votar en esta ronda';
+          return;
+        }
+
+
+
+        this.rondaVotacionService.getAllCandidatosByRondaId(this.id).subscribe(response => {
+          if (response.status === true) {
+            this.candidatos = response.message;
+          }
+        });
+      } else {
+
+        this.validacion.estado = false;
+        this.validacion.mensaje = 'No se puede cargar ninguna ronda con la URL proporcionada';
+
       }
-    });
+    } catch (error) {
+      this.validacion.estado = false;
+      this.validacion.mensaje = 'No se puede cargar ninguna ronda con la URL proporcionada';
+    }
   }
 
   async save() {
@@ -65,10 +102,13 @@ export class VotarComponent implements OnInit {
 
       setTimeout(() => {
         this.ocupado = false;
+        // detalleronda
         this.router.navigate(['']);
       }, 3000);
     }
   }
-
+  volver() {
+    this.router.navigate(['']);
+  }
 
 }

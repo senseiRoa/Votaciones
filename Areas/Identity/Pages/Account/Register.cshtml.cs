@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Demokratianweb.Models;
+using Demokratianweb.Service;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Demokratianweb.Areas.Identity.Pages.Account
 {
@@ -24,17 +26,19 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IHostingEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            this._env = env;
         }
 
         [BindProperty]
@@ -89,8 +93,13 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+                    htmlText = htmlText
+                        .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                        .Replace("{email}", user.Email);
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirme su Correo Electrónico ", htmlText);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

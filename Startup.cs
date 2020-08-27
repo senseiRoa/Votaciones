@@ -18,6 +18,7 @@ using Demokratianweb.Service;
 using System;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Demokratianweb.HubRT;
 
 namespace Demokratianweb
 {
@@ -66,7 +67,8 @@ namespace Demokratianweb
                 ;
             services.AddControllersWithViews();
 
-
+            //signalR
+            services.AddSignalR();
             //mail 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, CustomEmailSender>();
@@ -124,6 +126,9 @@ namespace Demokratianweb
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+
+                endpoints.MapHub<NotifyHub>("/notify");
+                
             });
 
             app.UseSpa(spa =>

@@ -37,7 +37,10 @@ namespace Demokratianweb.Service
 
                         entity.Rondavotacion.fechaCreacion = DateTime.Now;
                         entity.Rondavotacion.fechaEdicion = DateTime.Now;
-                        entity.Rondavotacion.Id = Guid.NewGuid();
+                        if (entity.Rondavotacion.Id == null)
+                        {
+                            entity.Rondavotacion.Id = Guid.NewGuid();
+                        }
                         entity.Rondavotacion.EstadoRegistro = Data.Enums.HelpConstantes.EstadoRegistro.Activo;
                         entity.Rondavotacion.Estado = Data.Enums.HelpConstantes.EstadoRondaVotacion.Abierta;
 
@@ -186,8 +189,36 @@ namespace Demokratianweb.Service
 
             return result;
 
-        }
+        }   
+        /*
+        public List<RondaVotanteWrapper> EstadoVotacionesAbiertas(Guid userId)
+        {
+            var votantes = (from x in this._applicationDBContext.Set<VotanteEntity>()
+                           join vv in this._applicationDBContext.Set<VotacionVotanteEntity>() on x.Id equals vv.IdVotante
+                           join rv in this._applicationDBContext.Set<RondaVotanteEntity>() on vv.Id equals rv.IdVotacionVotante
+                           where vv.Votacion.Estado.Equals(EstadoVotacion.Abierta) && x.UserId.ToLower().Equals(userId.ToString().ToLower())
+                           select rv.Id
+                                     ).ToList();
 
+            var result = (from rv in this._applicationDBContext.Set<RondaVotanteEntity>()
+                          join v in this._applicationDBContext.Set<ControlVotoVotanteEntity>()
+                          on rv.Id equals v.IdRondaVotante
+                          into joinedList
+                          from sub in joinedList.DefaultIfEmpty()
+                          where votantes.Contains(sub.IdRondaVotante)
+                          orderby rv.VotacionVotante.Votante.Nombre
+                          select new RondaVotanteWrapper
+                          {
+                              Votante = rv.VotacionVotante.Votante.Nombre,
+                              EstadoVoto = sub.RondaVotante != null
+                          }
+                        )
+                        .ToList();
+
+            return result;
+
+        }
+        */
         public Boolean AddVoto(VotoWrapper entity, Guid userId)
         {
             var registro = false;
@@ -335,7 +366,7 @@ namespace Demokratianweb.Service
 
 
                 }
-                resultado.TotalVotos =totalVotos;
+                resultado.TotalVotos = totalVotos;
                 resultado.resultados = resultado.resultados.OrderByDescending(x => x.votos).ToList();
                 return resultado;
 

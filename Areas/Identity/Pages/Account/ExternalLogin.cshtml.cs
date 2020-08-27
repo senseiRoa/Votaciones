@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Demokratianweb.Models;
 using Demokratianweb.Models;
-
+using Demokratianweb.Service;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Demokratianweb.Areas.Identity.Pages.Account
 {
@@ -25,18 +26,20 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IHostingEnvironment env)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            this._env = env;
         }
 
         [BindProperty]
@@ -143,8 +146,13 @@ namespace Demokratianweb.Areas.Identity.Pages.Account
                             values: new { area = "Identity", userId = userId, code = code },
                             protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+                        htmlText = htmlText
+                            .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                            .Replace("{email}", user.Email);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirme su Correo Electrónico ", htmlText);
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
