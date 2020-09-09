@@ -21,18 +21,18 @@ volumes:
 
 
 # --------------------------push image--------------------------
-#docker tag 2fc103d29800 senseiroa/votaciones-prod:v2
-#docker push senseiroa/votaciones-prod:v2
+#docker tag eec1d509eee6 senseiroa/votaciones-prod:v6
+#docker push senseiroa/votaciones-prod:v6
 #
 
 # --------------------------ejecutar--------------------------
-#docker run -d -p 8085:80 --name demokratianwebv2 senseiroa/votaciones-prod:v2
+#docker run -d -p 8085:80 --name demokratianwebv5 senseiroa/votaciones-prod:v6
 #
 #
 
 
-#docker tag e771ab3abfdc senseiroa/votaciones-prod:v4
-#docker push senseiroa/votaciones-prod:v4
+#docker tag 9b2e01c08d35 senseiroa/votaciones-prod:v5
+#docker push senseiroa/votaciones-prod:v5
 
 
-#docker run -d -p 8085:80 --name demokratianwebv4 senseiroa/votaciones-prod:v4
+#docker run -d -p 8085:80 --name demokratianwebv6 senseiroa/votaciones-prod:v6

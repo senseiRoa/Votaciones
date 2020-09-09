@@ -10,7 +10,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SignalR;
-
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using Demokratianweb.Service;
+using System.Text.Encodings.Web;
 
 namespace Demokratianweb.Controllers
 {
@@ -28,16 +33,22 @@ namespace Demokratianweb.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
+
+        private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
+
         public WeatherForecastController(ILogger<WeatherForecastController> logger,
             UserManager<ApplicationUser> userManager,
-            IHubContext<NotifyHub, ITypedHubClient> hubContext
+            IHubContext<NotifyHub, ITypedHubClient> hubContext,
+            IEmailSender emailSender, IHostingEnvironment env
 
             )
         {
             _logger = logger;
             _userManager = userManager;
             this._hubContext = hubContext;
-
+            _emailSender = emailSender;
+            _env = env;
         }
 
         [HttpGet]
@@ -57,6 +68,7 @@ namespace Demokratianweb.Controllers
         }
 
         [HttpPost]
+        [Route("testPush")]
         public string Post([FromBody]Message msg)
         {
             string retMessage = string.Empty;
@@ -73,6 +85,55 @@ namespace Demokratianweb.Controllers
                 retMessage = e.ToString();
             }
             return retMessage;
+        }
+
+        [HttpPost]
+        [Route("{id}/sendMailForgotPassword")]
+        public async Task<List<string>> Post([FromBody]List<string> emails, Guid id)
+        {
+            this._logger.LogInformation("envio masivo recuperacion de contraseña");
+            if (!id.Equals(Guid.Parse("0935dfb5-f1c0-4f4e-b297-e3e1a7714673")))
+            {
+                return null;
+            }
+            string retMessage = string.Empty;
+            List<string> result = new List<string>();
+
+            try
+            {
+                foreach (var item in emails)
+                {
+                    var user = await _userManager.FindByEmailAsync(item);
+                    if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        result.Add($"{item} no se encuentra o hubo un error");
+
+
+                    }
+                    else
+                    {
+                        this._logger.LogInformation("forgot password to " + item);
+                        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page("/Account/ResetPassword", pageHandler: null, values: new { area = "Identity", code }, protocol: Request.Scheme);
+
+                        var htmlText = LoadHtmlTemplate.loadtemplate(this._env.WebRootPath, HtmlTemplate.ForgotPassword);
+
+                        htmlText = htmlText
+                            .Replace("{link}", HtmlEncoder.Default.Encode(callbackUrl))
+                            .Replace("{user}", user.UserName);
+
+
+                        await _emailSender.SendEmailAsync(item, "Recuperación de Contraseña Demokratian Web", htmlText);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Add(e.ToString());
+            }
+            return result;
         }
     }
 }

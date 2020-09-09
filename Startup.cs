@@ -19,6 +19,9 @@ using System;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Demokratianweb.HubRT;
+using IdentityModel.Client;
+using System.Net.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Demokratianweb
 {
@@ -38,7 +41,7 @@ namespace Demokratianweb
             //Console.WriteLine("mi cadena de conexion es :" + cs);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(cs));
-           
+
             // repository
             services.AddScoped<CandidatoRepository>();
             services.AddScoped<ControlVotoVotanteRepository>();
@@ -63,12 +66,14 @@ namespace Demokratianweb
 
             services.AddAuthentication()
                 .AddIdentityServerJwt()
-                
+
                 ;
             services.AddControllersWithViews();
 
             //signalR
             services.AddSignalR();
+
+           
             //mail 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailSender, CustomEmailSender>();
@@ -106,6 +111,22 @@ namespace Demokratianweb
                 app.UseHsts();
             }
 
+            // https conf
+            var forwardOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                RequireHeaderSymmetry = false
+            };
+
+            forwardOptions.KnownNetworks.Clear();
+            forwardOptions.KnownProxies.Clear();
+
+            // ref: https://github.com/aspnet/Docs/issues/2384
+            app.UseForwardedHeaders(forwardOptions);
+
+            // fin
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (env.IsProduction())
@@ -118,7 +139,7 @@ namespace Demokratianweb
 
             app.UseAuthentication();
             app.UseIdentityServer();
-            
+
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
@@ -128,7 +149,7 @@ namespace Demokratianweb
                 endpoints.MapRazorPages();
 
                 endpoints.MapHub<NotifyHub>("/notify");
-                
+
             });
 
             app.UseSpa(spa =>
