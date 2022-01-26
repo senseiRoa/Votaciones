@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -307,7 +308,16 @@ namespace Demokratianweb.Controllers
             return new FileStreamResult(ms, "application/pdf");
         }
 
-
+        private static PdfPCell PhraseCell(Phrase phrase, int align)
+        {
+            PdfPCell cell = new PdfPCell(phrase);
+            cell.BorderColor = BaseColor.White;
+            cell.VerticalAlignment = PdfCell.ALIGN_TOP;
+            cell.HorizontalAlignment = align;
+            cell.PaddingBottom = 2f;
+            cell.PaddingTop = 0f;
+            return cell;
+        }
     }
 
 }
